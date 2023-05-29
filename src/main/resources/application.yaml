@@ -1,0 +1,60 @@
+server:
+  port: 9999
+  servlet:
+    session: 
+      # tomcat的默认session超时时间单位是分，不满一分钟则四舍五入，如设置30s，则实际为1分钟
+      # 单位可以是s、m、h、d
+      timeout: 5d
+spring:
+  profiles:
+    active: dev
+  datasource:
+    dynamic:
+      primary: manageboot
+      datasource:
+#        business:
+#          url: jdbc:oracle:thin:@192.168.249.220:1521:devdb
+#          username: kuaidi
+#          password: kingdee
+#          driver-class-name: oracle.jdbc.driver.OracleDriver
+        manageboot:
+          url: jdbc:h2:file:./h2db/db
+          username: root
+          password: 123456
+          driver-class-name: org.h2.Driver
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+        trace: true
+#关于mybatisplus的配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true #开启驼峰功能
+    auto-mapping-behavior: full #自动填充
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #控制台打印sql
+  mapper-locations: classpath*:mapper/**/*Mapper.xml #将配置路径下的*.xml文件加载到mybatis中
+  global-config:
+    # 逻辑删除配置
+    db-config:
+      # 删除前
+      logic-not-delete-value: 1
+      # 删除后
+      logic-delete-value: 0
+logging:
+  config: classpath:logback-spring.xml
+manageboot:
+  noauthUrls:
+      - /*.html
+      - /css/**
+      - /img/**
+      - /js/**
+      - /
+      - /user/login

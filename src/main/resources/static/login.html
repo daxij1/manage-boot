@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>manage-boot</title>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="./css/index.css">
+    <!-- import Vue before Element -->
+    <script src="./js/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="./js/elementui.js"></script>
+    <script src="./js/axios.js"></script>
+    <script src="./js/common.js"></script>
+    <style>
+        body {
+            font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+        }
+        .login-container {
+            border-radius: 5px;
+            -moz-border-radius: 5px;
+            background-clip: padding-box;
+            margin: 180px auto;
+            width: 350px;
+            padding: 35px 35px 15px;
+            background: #fff;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 0 25px #cac6c6;
+        }
+        .login-logo {
+            position: relative;
+            bottom: 100px;
+            left: -30px;
+            float: left;
+        }
+        .login-container .title {
+            margin: 0 auto 40px;
+            text-align: center;
+            color: #505458;
+            float: left;
+            right: 35px;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div id="login-form">
+        <form class="el-form login-container el-form--label-left">
+            <img src="./img/redisLogo3.b6c8f17.png" class="login-logo"/>
+            <h3 class="title">系统登录</h3>
+            <div class="el-form-item is-required">
+                <div class="el-form-item__content" style="margin-left: 0;">
+                    <div class="el-input">
+                        <input type="text" autocomplete="off" placeholder="账号" class="el-input__inner" v-model="loginParam.username"/>
+                    </div>
+                </div>
+            </div>
+            <div class="el-form-item is-required">
+                <div class="el-form-item__content" style="margin-left: 0;">
+                    <div class="el-input">
+                        <input type="password" autocomplete="off" placeholder="密码" class="el-input__inner" v-model="loginParam.password"/>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="el-form-item" style="width: 100%;">
+                <div class="el-form-item__content" style="margin-left: 0;">
+                    <el-button type="button" class="el-button el-button--primary" style="width: 100%;" @click="login"><span>登录</span></el-button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    let vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                loginParam: {
+                    username: '',
+                    password: ''
+                }
+            }
+        },
+        methods: {
+            login: function () {
+                post("/user/login", vm.loginParam).then(function (response) {
+                    if (response.code === 200) {
+                        jumpPage("/index.html")
+                    } else {
+                        vm.$message.error(response.msg);
+                    }
+                });
+            }
+        }
+    });
+</script>
+</html>

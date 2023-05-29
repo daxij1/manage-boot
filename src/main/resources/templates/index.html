@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>manage-boot</title>
+    <!--本地测试-->
+    <!--<link rel="stylesheet" href="../static/css/index.css">
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/elementui.js"></script>
+    <script src="../static/js/axios.js"></script>
+    <script src="../static/js/common.js"></script>-->
+
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/vue.js"></script>
+    <script src="js/elementui.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="js/common.js"></script>
+    <style>
+        body {
+            font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+        }
+        .el-header {
+            background-color: #409eff;
+            color: rgb(255, 255, 255);
+            line-height: 60px;
+        }
+        .el-aside {
+            color: #333;
+        }
+        .el-main {
+            overflow: hidden;
+        }
+        .header {
+            color: rgb(255, 255, 255);
+            font-size: 25px;
+            vertical-align: middle;
+        }
+        .header .userinfo {
+            text-align: right;
+            padding-right: 15px;
+            float: right;
+        }
+        .header .el-dropdown {
+            display: inline-block;
+            position: relative;
+            color: #606266;
+            font-size: 14px;
+        }
+        .header .userinfo .userinfo-inner {
+            cursor: pointer;
+            color: #fff;
+        }
+        .header .userinfo .userinfo-inner img {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            margin: 10px 0 10px 10px;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-container class="is-vertical">
+        <el-header style="--el-header-height:60px;" class="header el-col-24">
+            <div class="el-col-10">manage-boot</div>
+            <div class="el-col-10"></div>
+            <div class="userinfo el-col-4">
+                <el-dropdown @command="handleDropDownCommand">
+                    <span class="el-dropdown-link userinfo-inner el-dropdown-selfdefine">
+                      <img src="./img/redis_def.dd1d8ff.png">{{user.nickname}}
+                    </span>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item icon="el-icon-edit-outline" command="settings">修改信息</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-switch-button" command="logout">退出登录</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </div>
+        </el-header>
+        <el-container style="height: 1100px">
+            <el-aside style="width: 200px">
+                <el-menu :default-openeds="['1', '3']">
+                    <el-submenu index="1">
+                        <template slot="title"><i class="el-icon-s-tools"></i>系统配置</template>
+                        <el-menu-item-group>
+                            <el-menu-item @click="module='user'">用户管理</el-menu-item>
+                            <el-menu-item @click="module='role'">角色管理</el-menu-item>
+                            <el-menu-item @click="module='auth'">权限管理</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                    <el-submenu index="2">
+                        <template slot="title"><i class="el-icon-menu"></i>导航二</template>
+                        <el-menu-item-group>
+                            <el-menu-item @click="module='222'">选项1</el-menu-item>
+                            <el-menu-item @click="module='333'">选项2</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                    <el-submenu index="3">
+                        <template slot="title"><i class="el-icon-menu"></i>导航三</template>
+                        <el-menu-item-group>
+                            <el-menu-item @click="module='444'">选项1</el-menu-item>
+                            <el-menu-item @click="module='555'">选项2</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                </el-menu>
+            </el-aside>
+
+            <el-container v-if="module == 'user'">
+                <el-main>
+                    <iframe th:src="user.html" frameborder="0" scrolling="yes" width="100%" height="100%"></iframe>
+                </el-main>
+            </el-container>
+        </el-container>
+    </el-container>
+</div>
+</body>
+<script>
+    let vm = new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                module: 'user',
+                user: {
+                    nickname: ''
+                }
+            }
+        },
+        methods: {
+            userinfo() {
+                get("/user/userinfo").then(function (response) {
+                    if (response.code === 200) {
+                        vm.user = response.data;
+                        vm.nickname = response.data.nickname;
+                    } else {
+                        vm.$message.error(response.msg);
+                    }
+                });
+            },
+            handleDropDownCommand(command) {
+                console.log(command)
+                if (command === "logout") {
+                    get("/user/logout").then(function (response) {
+                        if (response.code === 200) {
+                            jumpPage("/login.html")
+                        } else {
+                            vm.$message.error(response.msg);
+                        }
+                    });
+                }
+            }
+        }
+    });
+    vm.userinfo();
+</script>
+</html>
