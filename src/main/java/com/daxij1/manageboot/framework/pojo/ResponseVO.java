@@ -1,8 +1,12 @@
 package com.daxij1.manageboot.framework.pojo;
 
+import com.daxij1.manageboot.framework.util.JsonUtil;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
 
 /**
@@ -79,6 +83,13 @@ public class ResponseVO<T> implements Serializable {
 
     public static <T> ResponseVO<T> buildResponse(int code, String msg, T data) {
         return new ResponseVO<>(code, msg, data);
+    }
+
+    public static void write(HttpServletResponse resp, ResponseVO<Object> result) throws IOException {
+        resp.setContentType("application/json;charset=UTF-8");
+        PrintWriter writer = resp.getWriter();
+        writer.write(JsonUtil.toJsonString(result));
+        writer.close();
     }
     
 }

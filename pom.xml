@@ -73,11 +73,11 @@
         </dependency>
 
         <!-- oracle jdbc -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
             <version>11.2.0.4.0</version>
-        </dependency>
+        </dependency>-->
         <!-- pagehelper -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
