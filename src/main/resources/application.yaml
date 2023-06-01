@@ -52,9 +52,8 @@ logging:
   config: classpath:logback-spring.xml
 manageboot:
   noauthUrls:
-      - /*.html
+      - /login.html
       - /css/**
       - /img/**
       - /js/**
-      - /
       - /user/login

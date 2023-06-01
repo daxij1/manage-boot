@@ -21,8 +21,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("T_USER")
-public class User implements Serializable {
+@TableName("T_MENU")
+public class Menu implements Serializable {
 
     private static final long serialVersionUID=1L;
 
@@ -33,28 +33,58 @@ public class User implements Serializable {
     private Integer id;
 
     /**
-     * 用户名
+     * 菜单名称
      */
-    @TableField("USERNAME")
-    private String username;
+    @TableField("NAME")
+    private String name;
 
     /**
-     * 密码
+     * 菜单级别 1、2
      */
-    @TableField("PASSWORD")
-    private String password;
+    @TableField("LEVEL")
+    private Integer level;
 
     /**
-     * 头像
+     * 菜单类型 1-目录型 2-菜单项
      */
-    @TableField("AVATOR")
-    private String avator;
+    @TableField("TYPE")
+    private Integer type;
 
     /**
-     * 昵称
+     * 父级菜单id 
      */
-    @TableField("NICKNAME")
-    private String nickname;
+    @TableField("PARENTID")
+    private Integer parentid;
+
+    /**
+     * 图标
+     */
+    @TableField("ICON")
+    private String icon;
+
+    /**
+     * 页面路径
+     */
+    @TableField("PATH")
+    private String path;
+
+    /**
+     * 描述
+     */
+    @TableField("DESCR")
+    private String descr;
+
+    /**
+     * 启用标志，0停用1启用 
+     */
+    @TableField("ACTIVE")
+    private Integer active;
+
+    /**
+     * 排序字段
+     */
+    @TableField("SORT")
+    private Integer sort;
 
     /**
      * 创建时间

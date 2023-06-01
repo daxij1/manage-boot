@@ -19,6 +19,10 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
+            if ("/".equals(request.getRequestURI()) || request.getRequestURI().endsWith(".html")) {//首页
+                response.sendRedirect("/login.html");
+                return false;
+            }
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write(JsonUtil.toJsonString(ResponseVO.authFail()));
             return false;

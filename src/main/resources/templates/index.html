@@ -3,12 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>manage-boot</title>
-    <!--本地测试-->
-    <!--<link rel="stylesheet" href="../static/css/index.css">
-    <script src="../static/js/vue.js"></script>
-    <script src="../static/js/elementui.js"></script>
-    <script src="../static/js/axios.js"></script>
-    <script src="../static/js/common.js"></script>-->
 
     <link rel="stylesheet" href="css/index.css">
     <script src="js/vue.js"></script>
@@ -59,6 +53,9 @@
             margin: 10px 0 10px 10px;
             float: right;
         }
+        .el-menu-item.active {
+            color: #409eff;
+        }
     </style>
 </head>
 <body>
@@ -82,35 +79,23 @@
         </el-header>
         <el-container style="height: 1100px">
             <el-aside style="width: 200px">
-                <el-menu :default-openeds="['1', '3']">
-                    <el-submenu index="1">
-                        <template slot="title"><i class="el-icon-s-tools"></i>系统配置</template>
-                        <el-menu-item-group>
-                            <el-menu-item @click="module='user'">用户管理</el-menu-item>
-                            <el-menu-item @click="module='role'">角色管理</el-menu-item>
-                            <el-menu-item @click="module='auth'">权限管理</el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>
-                    <el-submenu index="2">
-                        <template slot="title"><i class="el-icon-menu"></i>导航二</template>
-                        <el-menu-item-group>
-                            <el-menu-item @click="module='222'">选项1</el-menu-item>
-                            <el-menu-item @click="module='333'">选项2</el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>
-                    <el-submenu index="3">
-                        <template slot="title"><i class="el-icon-menu"></i>导航三</template>
-                        <el-menu-item-group>
-                            <el-menu-item @click="module='444'">选项1</el-menu-item>
-                            <el-menu-item @click="module='555'">选项2</el-menu-item>
+                <el-menu th::default-openeds="${defaultOpenDir}">
+                    <el-submenu th:attr="index=${stat.count}" th:each="menu,stat:${menuList}">
+                        <template slot="title"><i th:class="${menu.icon}"></i>[[${menu.name}]]</template>
+                        <el-menu-item-group th:if="${menu.menuList}">
+                            <el-menu-item th:@click="'module='+${menuitem.id}"
+                                          th::class="'{active: module===' + ${menuitem.id} +'}'"
+                                          th:each="menuitem:${menu.menuList}">
+                                [[${menuitem.name}]]
+                            </el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                 </el-menu>
             </el-aside>
 
-            <el-container v-if="module == 'user'">
+            <el-container th:v-if="${'module === ' + menuitem.id}" th:each="menuitem:${menuitemList}">
                 <el-main>
-                    <iframe th:src="user.html" frameborder="0" scrolling="yes" width="100%" height="100%"></iframe>
+                    <iframe th:src="${menuitem.path}" frameborder="0" scrolling="yes" width="100%" height="100%"></iframe>
                 </el-main>
             </el-container>
         </el-container>
@@ -122,7 +107,7 @@
         el: '#app',
         data: function () {
             return {
-                module: 'user',
+                module: [[${defaultModule}]],
                 user: {
                     nickname: ''
                 }
