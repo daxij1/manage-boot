@@ -25,8 +25,9 @@ public class ThymeleafController {
     private MenuService menuService;
 
     @RequestMapping(path = {"/", "/index.html"})
-    public String index(ModelMap map, HttpSession session){
+    public String index(ModelMap map, HttpSession session) {
         User user = (User) session.getAttribute("user");
+        map.put("user", user);
         Pair<List<MenuDTO>, List<Menu>> pair = menuService.findUserMenuList(user.getId());
         map.put("menuList", pair.getLeft());
         map.put("menuitemList", pair.getRight());

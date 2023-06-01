@@ -56,6 +56,9 @@
         .el-menu-item.active {
             color: #409eff;
         }
+        .el-menu-item-group__title {
+            padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -67,7 +70,7 @@
             <div class="userinfo el-col-4">
                 <el-dropdown @command="handleDropDownCommand">
                     <span class="el-dropdown-link userinfo-inner el-dropdown-selfdefine">
-                      <img src="./img/redis_def.dd1d8ff.png">{{user.nickname}}
+                      <img th:src="${user.avator}"/>{{user.nickname}}
                     </span>
                     </span>
                     <el-dropdown-menu slot="dropdown">
@@ -95,7 +98,7 @@
 
             <el-container th:v-if="${'module === ' + menuitem.id}" th:each="menuitem:${menuitemList}">
                 <el-main>
-                    <iframe th:src="${menuitem.path}" frameborder="0" scrolling="yes" width="100%" height="100%"></iframe>
+                    <iframe th:src="${menuitem.path}" frameborder="0" scrolling="yes"  width="100%" height="100%"></iframe>
                 </el-main>
             </el-container>
         </el-container>
@@ -109,21 +112,13 @@
             return {
                 module: [[${defaultModule}]],
                 user: {
-                    nickname: ''
+                    id: [[${user.id}]],
+                    nickname: '[[${user.nickname}]]',
+                    avator: '[[${user.avator}]]'
                 }
             }
         },
         methods: {
-            userinfo() {
-                get("/user/userinfo").then(function (response) {
-                    if (response.code === 200) {
-                        vm.user = response.data;
-                        vm.nickname = response.data.nickname;
-                    } else {
-                        vm.$message.error(response.msg);
-                    }
-                });
-            },
             handleDropDownCommand(command) {
                 console.log(command)
                 if (command === "logout") {
@@ -138,6 +133,5 @@
             }
         }
     });
-    vm.userinfo();
 </script>
 </html>
