@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,19 +17,15 @@ import java.util.Date;
  * </p>
  *
  * @author daxij1
- * @since 2023-05-31
+ * @since 2023-06-02
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("T_USER")
-public class User implements Serializable {
+@TableName("T_ROLE")
+public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    
-    // 注册时默认头像
-    public static final String DEF_AVATOR = "./img/head_admin.jpg";
 
     /**
      * id
@@ -39,31 +34,16 @@ public class User implements Serializable {
     private Integer id;
 
     /**
-     * 用户名
+     * 角色名称
      */
-    @TableField("USERNAME")
-    @NotEmpty(message = "用户名不能为空")
-    private String username;
+    @TableField("NAME")
+    private String name;
 
     /**
-     * 密码
+     * 描述
      */
-    @TableField("PASSWORD")
-    @NotEmpty(message = "密码不能为空")
-    private String password;
-
-    /**
-     * 头像
-     */
-    @TableField("AVATOR")
-    private String avator;
-
-    /**
-     * 昵称
-     */
-    @TableField("NICKNAME")
-    @NotEmpty(message = "昵称不能为空")
-    private String nickname;
+    @TableField("DESCR")
+    private String descr;
 
     /**
      * 创建时间

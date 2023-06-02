@@ -9,8 +9,8 @@ create TABLE `T_USER` (
 `password` varchar(60) NOT NULL,
 `avator` varchar(60) NOT NULL,
 `nickname` varchar(60),
-`createtime` TIMESTAMP,
-`lastmodifiedtime` TIMESTAMP
+`createtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+`lastmodifiedtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 comment on column `T_USER`.`id` is 'id';
 comment on column `T_USER`.`username` is '用户名';
@@ -35,8 +35,8 @@ create TABLE `T_MENU` (
 `descr` varchar(128),
 `active` INT DEFAULT 1,
 `sort` INT DEFAULT 1,
-`createtime` TIMESTAMP,
-`lastmodifiedtime` TIMESTAMP
+`createtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+`lastmodifiedtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 comment on column `T_MENU`.`id` is 'id';
 comment on column `T_MENU`.`name` is '菜单名称';
@@ -59,8 +59,8 @@ create TABLE `T_ROLE` (
 `id` INT AUTO_INCREMENT PRIMARY KEY,
 `name` varchar(60) NOT NULL,
 `descr` varchar(128),
-`createtime` TIMESTAMP,
-`lastmodifiedtime` TIMESTAMP
+`createtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+`lastmodifiedtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 comment on column `T_ROLE`.`id` is 'id';
 comment on column `T_ROLE`.`name` is '角色名称';
@@ -76,8 +76,8 @@ create TABLE `T_ROLE_USERBINDING` (
 `id` INT AUTO_INCREMENT PRIMARY KEY,
 `userid` INT NOT NULL,
 `roleid` INT NOT NULL,
-`createtime` TIMESTAMP,
-`lastmodifiedtime` TIMESTAMP
+`createtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+`lastmodifiedtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 comment on column `T_ROLE_USERBINDING`.`id` is 'id';
 comment on column `T_ROLE_USERBINDING`.`userid` is '用户id';
@@ -93,8 +93,8 @@ create TABLE `T_AUTH` (
 `id` INT AUTO_INCREMENT PRIMARY KEY,
 `roleid` INT NOT NULL,
 `menuid` INT NOT NULL,
-`createtime` TIMESTAMP,
-`lastmodifiedtime` TIMESTAMP
+`createtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+`lastmodifiedtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 comment on column `T_AUTH`.`id` is 'id';
 comment on column `T_AUTH`.`roleid` is '角色id';
