@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    
+
     @Autowired
     private UserMapper mapper;
-    
+
     @Override
     public User loginValid(String username, String password) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -27,5 +27,5 @@ public class UserServiceImpl implements UserService {
         queryWrapper.eq("password", AesUtil.encode(password));
         return mapper.selectOne(queryWrapper);
     }
-    
+
 }

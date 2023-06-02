@@ -8,7 +8,7 @@ import com.daxij1.manageboot.pojo.entity.User;
  * @description：UserService
  */
 public interface UserService {
-    
-    User loginValid(String username,String password);
-    
+
+    User loginValid(String username, String password);
+
 }

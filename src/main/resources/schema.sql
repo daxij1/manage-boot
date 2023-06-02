@@ -50,3 +50,54 @@ comment on column `T_MENU`.`active` is '启用标志，0停用1启用';
 comment on column `T_MENU`.`sort` is '排序字段';
 comment on column `T_MENU`.`createtime` is '创建时间';
 comment on column `T_MENU`.`lastmodifiedtime` is '最近更新时间';
+
+--          --
+--  T_ROLE  --
+--          --
+drop table IF EXISTS `T_ROLE`;
+create TABLE `T_ROLE` (
+`id` INT AUTO_INCREMENT PRIMARY KEY,
+`name` varchar(60) NOT NULL,
+`descr` varchar(128),
+`createtime` TIMESTAMP,
+`lastmodifiedtime` TIMESTAMP
+);
+comment on column `T_ROLE`.`id` is 'id';
+comment on column `T_ROLE`.`name` is '角色名称';
+comment on column `T_ROLE`.`descr` is '描述';
+comment on column `T_ROLE`.`createtime` is '创建时间';
+comment on column `T_ROLE`.`lastmodifiedtime` is '最近更新时间';
+
+--          --
+--  T_ROLE_USERBINDING  --
+--          --
+drop table IF EXISTS `T_ROLE_USERBINDING`;
+create TABLE `T_ROLE_USERBINDING` (
+`id` INT AUTO_INCREMENT PRIMARY KEY,
+`userid` INT NOT NULL,
+`roleid` INT NOT NULL,
+`createtime` TIMESTAMP,
+`lastmodifiedtime` TIMESTAMP
+);
+comment on column `T_ROLE_USERBINDING`.`id` is 'id';
+comment on column `T_ROLE_USERBINDING`.`userid` is '用户id';
+comment on column `T_ROLE_USERBINDING`.`roleid` is '角色id';
+comment on column `T_ROLE_USERBINDING`.`createtime` is '创建时间';
+comment on column `T_ROLE_USERBINDING`.`lastmodifiedtime` is '最近更新时间';
+
+--          --
+--  T_AUTH  --
+--          --
+drop table IF EXISTS `T_AUTH`;
+create TABLE `T_AUTH` (
+`id` INT AUTO_INCREMENT PRIMARY KEY,
+`roleid` INT NOT NULL,
+`menuid` INT NOT NULL,
+`createtime` TIMESTAMP,
+`lastmodifiedtime` TIMESTAMP
+);
+comment on column `T_AUTH`.`id` is 'id';
+comment on column `T_AUTH`.`roleid` is '角色id';
+comment on column `T_AUTH`.`menuid` is '菜单id';
+comment on column `T_AUTH`.`createtime` is '创建时间';
+comment on column `T_AUTH`.`lastmodifiedtime` is '最近更新时间';

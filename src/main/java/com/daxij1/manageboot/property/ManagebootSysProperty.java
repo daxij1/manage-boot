@@ -15,7 +15,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "manageboot")
 @Data
 public class ManagebootSysProperty {
-    
+
     private List<String> noauthUrls;
-    
+
 }

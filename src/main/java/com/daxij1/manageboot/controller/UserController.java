@@ -24,10 +24,10 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 @DS("manageboot")
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
-    
+
     @RequestMapping("/login")
     public ResponseVO<Object> login(@Valid @RequestBody LoginFormParam loginFormParam, HttpServletRequest request) throws ServiceException {
         String username = loginFormParam.getUsername();
@@ -46,10 +46,4 @@ public class UserController {
         return ResponseVO.success();
     }
 
-    @GetMapping("/userinfo")
-    public ResponseVO<Object> info(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("user");
-        return ResponseVO.success(user);
-    }
-    
 }

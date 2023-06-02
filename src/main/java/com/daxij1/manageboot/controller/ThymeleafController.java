@@ -29,14 +29,17 @@ public class ThymeleafController {
         User user = (User) session.getAttribute("user");
         map.put("user", user);
         Pair<List<MenuDTO>, List<Menu>> pair = menuService.findUserMenuList(user.getId());
-        map.put("menuList", pair.getLeft());
-        map.put("menuitemList", pair.getRight());
+        List<MenuDTO> menuList = pair.getLeft();
+        List<Menu> menuitemList = pair.getRight();
+        map.put("menuList", menuList);
+        map.put("menuitemList", menuitemList);
         // 默认展开第一个菜单目录
         // 多个用逗号隔开，如['1','3']
-        map.put("defaultOpenDir", "['1']");
-        // 默认进入id为2的模块
-        map.put("defaultModule", 2);
+        String defaultOpenDir = "['" + menuList.get(0).getId() + "']";
+        map.put("defaultOpenDir", defaultOpenDir);
+        // 默认进入的模块
+        map.put("defaultModule", menuList.get(0).getMenuList().get(0).getId());
         return "index";
     }
-    
+
 }

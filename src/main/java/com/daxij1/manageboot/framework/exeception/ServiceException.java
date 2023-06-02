@@ -23,5 +23,5 @@ public class ServiceException extends Exception {
     public ServiceException(String msg) {
         this(ResponseVO.FAILD, msg);
     }
-    
+
 }

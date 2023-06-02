@@ -13,15 +13,15 @@ import cn.hutool.crypto.symmetric.AES;
 public class AesUtil {
 
     // 自定义密钥
-    private static String secretKey = "kuaidi100@2023";
-    
+    private static String secretKey = "manage-boot@2023";
+
     private static AES aes = SecureUtil.aes(DigestUtil.sha256(secretKey.getBytes()));
-    
+
     public static String encode(String source) {
         byte[] encryptData = aes.encrypt(source);
         return HexUtil.encodeHexStr(encryptData);
     }
-    
+
     public static String decode(String target) {
         byte[] decryptData = aes.decrypt(HexUtil.decodeHex(target));
         return new String(decryptData);
@@ -30,5 +30,5 @@ public class AesUtil {
     public static void main(String[] args) {
         System.out.println(encode("123456"));
     }
-    
+
 }

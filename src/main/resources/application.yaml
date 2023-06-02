@@ -22,6 +22,10 @@ spring:
           username: root
           password: 123456
           driver-class-name: org.h2.Driver
+    # 控制应用启动时是否执行schema.sql和data.sql
+    # EMBEDDED 仅初始化内嵌数据库
+    # NEVER 从不初始化
+    initializationMode: EMBEDDED
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -39,8 +43,8 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true #开启驼峰功能
     auto-mapping-behavior: full #自动填充
-    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #控制台打印sql
-  mapper-locations: classpath*:mapper/**/*Mapper.xml #将配置路径下的*.xml文件加载到mybatis中
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #控制台打印sql
+  mapper-locations: classpath*:com/daxij1/manageboot/mapper/**/*Mapper.xml #将配置路径下的*.xml文件加载到mybatis中
   global-config:
     # 逻辑删除配置
     db-config:

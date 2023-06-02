@@ -19,9 +19,9 @@ import java.io.Serializable;
 public class ResponseVO<T> implements Serializable {
 
     public static final Integer SUCCESS = 200;
-    
+
     public static final Integer AUTH_FAILD = 403;
-    
+
     public static final Integer FAILD = 500;
 
     private int code;
@@ -70,11 +70,11 @@ public class ResponseVO<T> implements Serializable {
     }
 
     public static <T> ResponseVO<T> error(String msg) {
-        return buildResponse(FAILD, msg,  null);
+        return buildResponse(FAILD, msg, null);
     }
-    
+
     public static <T> ResponseVO<T> authFail() {
-        return buildResponse(AUTH_FAILD, "未登录或登录失效",  null);
+        return buildResponse(AUTH_FAILD, "未登录或登录失效", null);
     }
 
     public static <T> ResponseVO<T> success(int code, String msg, T data) {
@@ -91,6 +91,6 @@ public class ResponseVO<T> implements Serializable {
         writer.write(JsonUtil.toJsonString(result));
         writer.close();
     }
-    
+
 }
 

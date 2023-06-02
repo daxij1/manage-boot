@@ -9,8 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @description：JsonUtil
  */
 public class JsonUtil {
-    
-    public static String toJsonString(Object object){
+
+    public static String toJsonString(Object object) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.writeValueAsString(object);
@@ -18,5 +18,5 @@ public class JsonUtil {
             return "";
         }
     }
-    
+
 }

@@ -15,21 +15,21 @@ import java.util.List;
 public class MenuDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private Integer id;
-    
+
     private String name;
-    
+
     private Integer level;
-    
+
     private Integer type;
-    
+
     private Integer parentid;
-    
+
     private String icon;
-    
+
     private String descr;
-    
+
     private List<Menu> menuList;
-    
+
 }

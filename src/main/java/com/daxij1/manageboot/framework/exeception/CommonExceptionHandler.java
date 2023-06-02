@@ -24,7 +24,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
     @ResponseBody
-    public ResponseVO<Object> handleServiceException(ServiceException e){
+    public ResponseVO<Object> handleServiceException(ServiceException e) {
         return ResponseVO.error(e.getErrorCode(), e.getMsg());
     }
 
@@ -51,7 +51,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public ResponseVO<Object> handleException(Exception e){
+    public ResponseVO<Object> handleException(Exception e) {
         return ResponseVO.error();
     }
 

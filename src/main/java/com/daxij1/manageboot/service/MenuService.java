@@ -12,10 +12,10 @@ import java.util.List;
  * @description：MenuService
  */
 public interface MenuService {
-    
+
     /**
      * 获取用户的菜单列表，left返回菜单树，right返回所有二级菜单
-     * */
+     */
     Pair<List<MenuDTO>, List<Menu>> findUserMenuList(long userid);
-    
+
 }

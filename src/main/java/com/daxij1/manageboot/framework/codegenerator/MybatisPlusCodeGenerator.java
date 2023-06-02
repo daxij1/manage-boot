@@ -24,8 +24,8 @@ public class MybatisPlusCodeGenerator {
     public static void main(String[] args) {
         gen();
     }
-    
-    private static void gen(){
+
+    private static void gen() {
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
 
@@ -33,7 +33,7 @@ public class MybatisPlusCodeGenerator {
         GlobalConfig gc = new GlobalConfig();
         // 获取当前项目根路径
         String projectPath = "D:\\idea\\workspace\\my\\manage-boot";
-        gc.setOutputDir(projectPath+"/src/main/java");
+        gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("daxij1");
         gc.setOpen(false); //不打开生产的文件
         gc.setFileOverride(false); //不覆盖之前生成的文件
@@ -67,7 +67,7 @@ public class MybatisPlusCodeGenerator {
 
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
-        strategy.setInclude("T_USER");
+        strategy.setInclude("T_ROLE", "T_ROLE_USERBINDING", "T_AUTH");
         strategy.setNaming(NamingStrategy.underline_to_camel);// 下划线转驼峰
         strategy.setTablePrefix("t_");//去掉t_这个前缀后生成类名
         strategy.setEntityLombokModel(true);// 自动生成lombok注解  记住要有lombok依赖和对应的插件哈
@@ -90,5 +90,5 @@ public class MybatisPlusCodeGenerator {
         // 执行
         mpg.execute();
     }
-    
+
 }

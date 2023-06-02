@@ -2,4 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.daxij1.manageboot.mapper.MenuMapper">
 
+    <select id="selectListByUserid" resultType="com.daxij1.manageboot.pojo.entity.Menu" parameterType="String">
+        SELECT * FROM T_MENU t1
+        WHERE t1.ID IN (
+        SELECT t2.menuid FROM T_AUTH t2 WHERE t2.roleid IN (
+        SELECT t3.roleid FROM T_ROLE_USERBINDING t3 WHERE t3.userid = #{userid}
+        )
+        )
+        AND t1.active = 1
+        <if test="level != null">
+            AND t1.level = #{level}
+        </if>
+        order by t1.sort
+    </select>
+
 </mapper>

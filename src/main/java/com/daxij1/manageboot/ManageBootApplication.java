@@ -14,5 +14,5 @@ public class ManageBootApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManageBootApplication.class, args);
     }
-    
+
 }

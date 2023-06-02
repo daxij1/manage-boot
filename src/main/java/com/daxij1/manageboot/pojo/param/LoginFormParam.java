@@ -17,5 +17,5 @@ public class LoginFormParam {
 
     @NotEmpty(message = "密码不能为空")
     private String password;
-    
+
 }

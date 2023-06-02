@@ -1,18 +1,19 @@
 package com.daxij1.manageboot.pojo.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author daxij1
@@ -24,7 +25,7 @@ import lombok.experimental.Accessors;
 @TableName("T_MENU")
 public class Menu implements Serializable {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * id
@@ -51,7 +52,7 @@ public class Menu implements Serializable {
     private Integer type;
 
     /**
-     * 父级菜单id 
+     * 父级菜单id
      */
     @TableField("PARENTID")
     private Integer parentid;
@@ -75,7 +76,7 @@ public class Menu implements Serializable {
     private String descr;
 
     /**
-     * 启用标志，0停用1启用 
+     * 启用标志，0停用1启用
      */
     @TableField("ACTIVE")
     private Integer active;
