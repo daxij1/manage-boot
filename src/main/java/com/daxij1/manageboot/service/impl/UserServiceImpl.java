@@ -22,6 +22,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
         queryWrapper.eq("password", AesUtil.encode(password));
+        queryWrapper.eq("del", 0);
         return getBaseMapper().selectOne(queryWrapper);
     }
 

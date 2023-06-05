@@ -2,8 +2,8 @@
 --  T_USER  --
 --          --
 -- 密钥manage-boot@2023，密码123456
-insert into `T_USER` VALUES (1, 'admin', 'f080d3964e1d25df2da8a31c3b69dbeb', './img/head_admin.jpg', '吴彦祖', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-insert into `T_USER` VALUES (2, 'test', 'f080d3964e1d25df2da8a31c3b69dbeb', './img/head_admin.jpg', '发狂迷', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+insert into `T_USER` VALUES (1, 'admin', 'f080d3964e1d25df2da8a31c3b69dbeb', './img/head_admin.jpg', '吴彦祖', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+insert into `T_USER` VALUES (2, 'test', 'f080d3964e1d25df2da8a31c3b69dbeb', './img/head_admin.jpg', '发狂迷', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --          --
 --  T_MENU  --

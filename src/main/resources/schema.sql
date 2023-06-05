@@ -9,6 +9,7 @@ create TABLE `T_USER` (
 `password` varchar(60) NOT NULL,
 `avator` varchar(60) NOT NULL,
 `nickname` varchar(60),
+`del` INT DEFAULT 0,
 `createtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 `lastmodifiedtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -17,6 +18,7 @@ comment on column `T_USER`.`username` is '用户名';
 comment on column `T_USER`.`password` is '密码';
 comment on column `T_USER`.`avator` is '头像';
 comment on column `T_USER`.`nickname` is '昵称';
+comment on column `T_USER`.`del` is '删除标志 0-否 1-是';
 comment on column `T_USER`.`createtime` is '创建时间';
 comment on column `T_USER`.`lastmodifiedtime` is '最近更新时间';
 

@@ -5,7 +5,7 @@ function get(uri) {
     return axios.get(urlPrefix + uri)
         .then(function (response) {
             response = response.data;
-            if (response.code === 403) {
+            if (response.code === 401) {
                 jumpPage("/login.html")
             } else {
                 return response;

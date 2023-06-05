@@ -6,16 +6,20 @@ import com.daxij1.manageboot.framework.exeception.ServiceException;
 import com.daxij1.manageboot.framework.pojo.ResponseVO;
 import com.daxij1.manageboot.framework.util.AesUtil;
 import com.daxij1.manageboot.pojo.entity.User;
-import com.daxij1.manageboot.pojo.param.CommonQueryParam;
 import com.daxij1.manageboot.pojo.param.LoginFormParam;
+import com.daxij1.manageboot.pojo.param.UserAddOrUpdateParam;
+import com.daxij1.manageboot.pojo.param.UserQueryParam;
 import com.daxij1.manageboot.service.UserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,18 +54,45 @@ public class UserController {
     }
     
     @PostMapping("/list")
-    public ResponseVO<PageInfo<User>> list(@Valid @RequestBody CommonQueryParam param){
+    public ResponseVO<PageInfo<User>> list(@Valid @RequestBody UserQueryParam param){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("del", 0);
+        if (StringUtils.isNotEmpty(param.getUsername())) {
+            queryWrapper.eq("username", param.getUsername());
+        }
         PageHelper.startPage(param.getPageno(), param.getPagesize());
         List<User> list = userService.list(queryWrapper);
+        for (User user : list) {
+            user.setPassword(AesUtil.decode(user.getPassword()));
+        }
         return ResponseVO.success(new PageInfo<>(list));
     }
 
-    @PostMapping("/add")
-    public ResponseVO<Object> add(@Valid @RequestBody User user){
+    @PostMapping("/addOrUpdate")
+    public ResponseVO<Object> addOrUpdate(@Valid @RequestBody UserAddOrUpdateParam param){
+        Integer id = param.getId();
+        User user = new User();
+        BeanUtils.copyProperties(param, user);
         user.setPassword(AesUtil.encode(user.getPassword()));
-        user.setAvator(User.DEF_AVATOR);
-        userService.save(user);
+        if (id != null) { //更新
+            user.setLastmodifiedtime(new Date());
+            userService.updateById(user);
+        } else { //新增
+            user.setAvator(User.DEF_AVATOR);
+            userService.save(user);
+        }
+        return ResponseVO.success();
+    }
+
+    @GetMapping("/delete")
+    public ResponseVO<Object> delete(Integer id){
+        if (id == null || id <= 0) {
+            return ResponseVO.paramFail("用户id有误");
+        }
+        User user = new User();
+        user.setId(id);
+        user.setDel(1);
+        userService.updateById(user);
         return ResponseVO.success();
     }
 

@@ -1,8 +1,8 @@
 package com.daxij1.manageboot.pojo.param;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.Range;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -11,13 +11,14 @@ import javax.validation.constraints.NotNull;
  * @description：CommonQueryParam
  */
 @Data
-public class CommonQueryParam {
+public class PageQueryParam {
 
     @NotNull(message = "pageno不能为空")
-    @Range(message = "pageno需大于等于1", min = 1)
+    @Min(message = "pageno参数错误", value = 1)
     private int pageno;
 
     @NotNull(message = "pagesize不能为空")
+    @Min(message = "pagesieze参数错误", value = 1)
     private int pagesize;
     
 }

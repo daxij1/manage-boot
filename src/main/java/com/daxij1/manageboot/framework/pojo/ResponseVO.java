@@ -20,7 +20,9 @@ public class ResponseVO<T> implements Serializable {
 
     public static final Integer SUCCESS = 200;
 
-    public static final Integer AUTH_FAILD = 403;
+    public static final Integer AUTH_FAILD = 401;
+    
+    public static final Integer PARAM_FAILD = 403;
 
     public static final Integer FAILD = 500;
 
@@ -75,6 +77,10 @@ public class ResponseVO<T> implements Serializable {
 
     public static <T> ResponseVO<T> authFail() {
         return buildResponse(AUTH_FAILD, "未登录或登录失效", null);
+    }
+    
+    public static <T> ResponseVO<T> paramFail(String msg) {
+        return buildResponse(PARAM_FAILD, msg, null);
     }
 
     public static <T> ResponseVO<T> success(int code, String msg, T data) {

@@ -21,7 +21,62 @@
 </head>
 <body>
 <div id="app">
-    user
+    <div class="grid-content">
+        <template>
+            <el-form :inline="true">
+                <el-form-item label="用户名:">
+                    <el-input v-model="query.username" placeholder="用户名" style="width: 300px"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="loadList">查询</el-button>
+                    <el-button @click="resetQuery">重置</el-button>
+                    <el-button type="danger" @click="popAddDialog">新增</el-button>
+                </el-form-item>
+            </el-form>
+            <el-table :data="tableData" border style="width: 100%">
+                <el-table-column fixed prop="id" label="id" width="130px"></el-table-column>
+                <el-table-column prop="username" label="用户名" width="130px"></el-table-column>
+                <el-table-column prop="password" label="密码"></el-table-column>
+                <el-table-column prop="avator" label="头像"></el-table-column>
+                <el-table-column prop="nickname" label="昵称"></el-table-column>
+                <el-table-column prop="createtime" label="createtime" width="230px"></el-table-column>
+                <el-table-column align="right" label="操作" width="150px">
+                    <template slot-scope="scope">
+                        <el-button size="mini" type="warning" @click="popEditDialog(scope.row)">编辑</el-button>
+                        <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="query.pageno"
+                    :page-sizes="[10, 15, 20, 50]"
+                    :page-size="query.pagesize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="pages.total">
+            </el-pagination>
+        </template>
+    </div>
+
+    <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
+        <el-form :model="curItem">
+            <input type="hidden" v-model="curItem.id" autocomplete="off"/>
+            <el-form-item class="is-required" label="用户名：" label-width="120px">
+                <el-input v-model="curItem.username" autocomplete="off" placeholder="用户名"></el-input>
+            </el-form-item>
+            <el-form-item class="is-required" label="密码：" label-width="120px">
+                <el-input v-model="curItem.password" autocomplete="off" placeholder="密码"></el-input>
+            </el-form-item>
+            <el-form-item class="is-required" label="昵称：" label-width="120px">
+                <el-input v-model="curItem.nickname" autocomplete="off" placeholder="昵称"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="handleAddOrUpdate">确 定</el-button>
+        </div>
+    </el-dialog>
 </div>
 </body>
 <script>
@@ -29,12 +84,101 @@
         el: '#app',
         data: function () {
             return {
-                
+                query: {
+                    pageno: 1,
+                    pagesize: 10
+                },
+                tableData: [],
+                pages: { total: 0 },
+                dialogFormVisible: false,
+                dialogTitle: "新增",
+                curItem: {}
             }
         },
         methods: {
-            
+            // 列表
+            loadList: function () {
+                post("/user/list", vm.query).then(function (response) {
+                    if (response.code === 200) {
+                        vm.pages.total = response.data.total;
+                        vm.tableData = response.data.list;
+                    } else {
+                        vm.$message.error(response.msg);
+                    }
+                });
+            },
+            // 新增或更新
+            handleAddOrUpdate: function(){
+                post("/user/addOrUpdate", vm.curItem).then(function (response) {
+                    if (response.code === 200) {
+                        vm.$message({
+                            message: '成功',
+                            type: 'success'
+                        });
+                        vm.loadList();
+                        vm.dialogFormVisible = false;
+                    } else {
+                        vm.$message.error(response.msg);
+                    }
+                });
+            },
+            // 重置查询
+            resetQuery: function(){
+                vm.query = {
+                    pageno: 1,
+                    pagesize: 10
+                }
+            },
+            // 新增弹窗
+            popAddDialog: function() {
+                vm.curItem = {};
+                vm.dialogTitle = '新增';
+                vm.dialogFormVisible = true;
+            },
+            // 编辑弹窗
+            popEditDialog: function (row) {
+                vm.curItem = JSON.parse(JSON.stringify(row));
+                vm.dialogTitle = '编辑';
+                vm.dialogFormVisible = true;
+            },
+            // 删除
+            handleDelete: function (id) {
+                vm.$confirm('确认删除').then(function () {
+                    get("/user/delete?id="+id).then(function (response) {
+                        if (response.code === 200) {
+                            vm.$message({
+                                message: '成功',
+                                type: 'success'
+                            });
+                            vm.loadList();
+                        } else {
+                            vm.$message.error(response.msg);
+                        }
+                    });
+                });
+            },
+            handleSizeChange: function (val) {
+                vm.query.pagesize = val;
+                vm.loadList();
+            },
+            handleCurrentChange: function (val) {
+                vm.query.pageno = val;
+                vm.loadList();
+            },
+            handleCopy: function (txt) {
+                let textarea = document.createElement("textarea");
+                textarea.value = txt;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textarea);
+                vm.$message({
+                    type: 'success',
+                    message: '已复制到剪贴板'
+                });
+            }
         }
     });
+    vm.loadList();
 </script>
 </html>

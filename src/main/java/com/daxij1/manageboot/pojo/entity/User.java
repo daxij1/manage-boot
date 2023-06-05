@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -42,14 +41,12 @@ public class User implements Serializable {
      * 用户名
      */
     @TableField("USERNAME")
-    @NotEmpty(message = "用户名不能为空")
     private String username;
 
     /**
      * 密码
      */
     @TableField("PASSWORD")
-    @NotEmpty(message = "密码不能为空")
     private String password;
 
     /**
@@ -62,8 +59,13 @@ public class User implements Serializable {
      * 昵称
      */
     @TableField("NICKNAME")
-    @NotEmpty(message = "昵称不能为空")
     private String nickname;
+
+    /**
+     * 删除标志 0-否 1-是
+     */
+    @TableField("del")
+    private Integer del;
 
     /**
      * 创建时间
