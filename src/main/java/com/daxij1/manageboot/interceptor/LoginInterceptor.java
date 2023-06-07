@@ -1,7 +1,7 @@
 package com.daxij1.manageboot.interceptor;
 
 import com.daxij1.manageboot.framework.pojo.ResponseVO;
-import com.daxij1.manageboot.pojo.entity.User;
+import com.daxij1.manageboot.pojo.dto.SessionUserDTO;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +16,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        User user = (User) request.getSession().getAttribute("user");
-        if (user == null) {
+        SessionUserDTO sessionUser = (SessionUserDTO) request.getSession().getAttribute("user");
+        if (sessionUser == null) {
             if ("/".equals(request.getRequestURI()) || request.getRequestURI().endsWith(".html")) {//首页
                 response.sendRedirect("/login.html");
                 return false;

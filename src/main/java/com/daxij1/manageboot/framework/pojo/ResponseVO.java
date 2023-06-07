@@ -18,12 +18,19 @@ import java.io.Serializable;
 @ToString
 public class ResponseVO<T> implements Serializable {
 
+    // 成功
     public static final Integer SUCCESS = 200;
 
+    // 登录校验
     public static final Integer AUTH_FAILD = 401;
-    
-    public static final Integer PARAM_FAILD = 403;
 
+    // 权限校验
+    public static final Integer AUTH_ROLE_FAILD = 403;
+    
+    // 参数错误
+    public static final Integer PARAM_FAILD = 400;
+
+    // 服务器错误
     public static final Integer FAILD = 500;
 
     private int code;
@@ -77,6 +84,10 @@ public class ResponseVO<T> implements Serializable {
 
     public static <T> ResponseVO<T> authFail() {
         return buildResponse(AUTH_FAILD, "未登录或登录失效", null);
+    }
+    
+    public static <T> ResponseVO<T> authRoleFail() {
+        return buildResponse(AUTH_ROLE_FAILD, "权限不足，请联系管理员", null);
     }
     
     public static <T> ResponseVO<T> paramFail(String msg) {

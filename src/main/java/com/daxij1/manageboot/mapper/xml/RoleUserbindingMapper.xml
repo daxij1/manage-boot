@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.daxij1.manageboot.mapper.RoleUserbindingMapper">
+    
+    <select id="findRoleNamesByUserId" resultType="String" parameterType="java.lang.Integer">
+        SELECT name FROM T_ROLE t WHERE t.id IN(SELECT roleid FROM T_ROLE_USERBINDING WHERE userid = #{userid})
+    </select>
 
 </mapper>

@@ -2,13 +2,16 @@ package com.daxij1.manageboot.controller;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.daxij1.manageboot.framework.annotation.Auth;
 import com.daxij1.manageboot.framework.exeception.ServiceException;
 import com.daxij1.manageboot.framework.pojo.ResponseVO;
 import com.daxij1.manageboot.framework.util.AesUtil;
+import com.daxij1.manageboot.pojo.dto.SessionUserDTO;
 import com.daxij1.manageboot.pojo.entity.User;
 import com.daxij1.manageboot.pojo.param.LoginFormParam;
 import com.daxij1.manageboot.pojo.param.UserAddOrUpdateParam;
 import com.daxij1.manageboot.pojo.param.UserQueryParam;
+import com.daxij1.manageboot.service.RoleUserbindingService;
 import com.daxij1.manageboot.service.UserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -30,10 +33,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @DS("manageboot")
+@Auth(role = "超级管理员")
 public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private RoleUserbindingService roleUserbindingService;
     
     @PostMapping("/login")
     public ResponseVO<Object> login(@Valid @RequestBody LoginFormParam loginFormParam, HttpServletRequest request) throws ServiceException {
@@ -43,7 +50,11 @@ public class UserController {
         if (user == null) {
             throw new ServiceException("用户名或密码错误");
         }
-        request.getSession().setAttribute("user", user);
+        List<String> roles = roleUserbindingService.findRoleNamesByUserId(user.getId());
+        SessionUserDTO sessionUser = new SessionUserDTO();
+        BeanUtils.copyProperties(user, sessionUser);
+        sessionUser.setRoles(roles);
+        request.getSession().setAttribute("user", sessionUser);
         return ResponseVO.success();
     }
 

@@ -52,6 +52,7 @@ public class CommonExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseVO<Object> handleException(Exception e) {
+        log.error(e.getMessage(), e);
         return ResponseVO.error();
     }
 

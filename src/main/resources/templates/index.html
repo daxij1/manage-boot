@@ -70,7 +70,7 @@
             <div class="userinfo el-col-4">
                 <el-dropdown @command="handleDropDownCommand">
                     <span class="el-dropdown-link userinfo-inner el-dropdown-selfdefine">
-                      <img th:src="${user.avator}"/>{{user.nickname}}
+                      <img th:src="${sessionUser.avator}"/>[[${sessionUser.nickname}]]
                     </span>
                     </span>
                     <el-dropdown-menu slot="dropdown">
@@ -110,12 +110,7 @@
         el: '#app',
         data: function () {
             return {
-                module: [[${defaultModule}]],
-                user: {
-                    id: [[${user.id}]],
-                    nickname: '[[${user.nickname}]]',
-                    avator: '[[${user.avator}]]'
-                }
+                module: [[${defaultModule}]]
             }
         },
         methods: {

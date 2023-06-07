@@ -3,6 +3,9 @@ package com.daxij1.manageboot.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.daxij1.manageboot.pojo.entity.RoleUserbinding;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,5 +17,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface RoleUserbindingMapper extends BaseMapper<RoleUserbinding> {
+
+    List<String> findRoleNamesByUserId(@Param("userid") Integer userid);
 
 }

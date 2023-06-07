@@ -1,5 +1,6 @@
 package com.daxij1.manageboot.config;
 
+import com.daxij1.manageboot.interceptor.AuthInterceptor;
 import com.daxij1.manageboot.interceptor.LoginInterceptor;
 import com.daxij1.manageboot.property.ManagebootSysProperty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class ManageBootWebMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns(property.getNoauthUrls());
+        registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/**").excludePathPatterns(property.getNoauthUrls());
     }
 
 }

@@ -18,7 +18,7 @@ function post(uri, param) {
     return axios.post(urlPrefix + uri, param)
         .then(function (response) {
             response = response.data;
-            if (response.code === 403) {
+            if (response.code === 401) {
                 jumpPage("/login.html")
             } else {
                 return response;
