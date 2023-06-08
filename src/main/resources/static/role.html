@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>menu</title>
+    <title>role</title>
+    <!-- import CSS -->
     <link rel="stylesheet" href="./css/index.css">
+    <!-- import Vue before Element -->
     <script src="./js/vue.js"></script>
+    <!-- import JavaScript -->
     <script src="./js/elementui.js"></script>
     <script src="./js/axios.js"></script>
     <script src="./js/common.js"></script>
@@ -21,16 +24,8 @@
     <div class="grid-content">
         <template>
             <el-form :inline="true">
-                <el-form-item>
-                    <el-col style="width: 120px">菜单层级：</el-col>
-                    <el-select v-model="query.level" placeholder="请选择菜单层级" style="width: 300px">
-                        <el-option key="" label="全部" value=""></el-option>
-                        <el-option key="1" label="一级" value="1"></el-option>
-                        <el-option key="2" label="二级" value="2"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="菜单名称:">
-                    <el-input v-model="query.name" placeholder="菜单名称" style="width: 300px"></el-input>
+                <el-form-item label="名称:">
+                    <el-input v-model="query.name" placeholder="名称" style="width: 300px"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="loadList">查询</el-button>
@@ -40,13 +35,8 @@
             </el-form>
             <el-table :data="tableData" border style="width: 100%">
                 <el-table-column fixed prop="id" label="id" width="130px"></el-table-column>
-                <el-table-column prop="name" label="菜单名称" width="130px"></el-table-column>
-                <el-table-column prop="level" label="菜单级别" width="100px"></el-table-column>
-                <el-table-column prop="parentid" label="父级菜单id"></el-table-column>
-                <el-table-column prop="icon" label="图标"></el-table-column>
-                <el-table-column prop="path" label="页面路径"></el-table-column>
+                <el-table-column prop="name" label="角色名称" width="130px"></el-table-column>
                 <el-table-column prop="descr" label="描述"></el-table-column>
-                <el-table-column prop="sort" label="排序字段" width="100px"></el-table-column>
                 <el-table-column prop="createtime" label="createtime" width="230px"></el-table-column>
                 <el-table-column align="right" label="操作" width="150px">
                     <template slot-scope="scope">
@@ -70,29 +60,11 @@
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
         <el-form :model="curItem">
             <input type="hidden" v-model="curItem.id" autocomplete="off"/>
-            <el-form-item class="is-required" label="菜单名称：" label-width="120px">
-                <el-input v-model="curItem.name" autocomplete="off" placeholder="菜单名称"></el-input>
+            <el-form-item class="is-required" label="角色名称：" label-width="120px">
+                <el-input v-model="curItem.name" autocomplete="off" placeholder="角色名称"></el-input>
             </el-form-item>
-            <el-form-item class="is-required" label="菜单级别：" label-width="120px">
-                <el-select v-model="curItem.level" placeholder="请选择菜单层级" style="width: 100%">
-                    <el-option key="1" label="一级" value="1"></el-option>
-                    <el-option key="2" label="二级" value="2"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="父级菜单id：" label-width="120px">
-                <el-input v-model="curItem.parentid" autocomplete="off" placeholder="父级菜单id"></el-input>
-            </el-form-item>
-            <el-form-item label="图标：" label-width="120px">
-                <el-input v-model="curItem.icon" autocomplete="off" placeholder="图标"></el-input>
-            </el-form-item>
-            <el-form-item label="页面路径：" label-width="120px">
-                <el-input v-model="curItem.path" autocomplete="off" placeholder="页面路径"></el-input>
-            </el-form-item>
-            <el-form-item label="描述：" label-width="120px">
+            <el-form-item class="is-required" label="描述：" label-width="120px">
                 <el-input v-model="curItem.descr" autocomplete="off" placeholder="描述"></el-input>
-            </el-form-item>
-            <el-form-item label="排序字段：" label-width="120px">
-                <el-input v-model="curItem.sort" autocomplete="off" placeholder="排序字段"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -121,7 +93,7 @@
         methods: {
             // 列表
             loadList: function () {
-                post("/menu/list", vm.query).then(function (response) {
+                post("/role/list", vm.query).then(function (response) {
                     if (response.code === 200) {
                         vm.pages.total = response.data.total;
                         vm.tableData = response.data.list;
@@ -132,7 +104,7 @@
             },
             // 新增或更新
             handleAddOrUpdate: function(){
-                post("/menu/addOrUpdate", vm.curItem).then(function (response) {
+                post("/role/addOrUpdate", vm.curItem).then(function (response) {
                     if (response.code === 200) {
                         vm.$message({
                             message: '成功',
@@ -167,7 +139,7 @@
             // 删除
             handleDelete: function (id) {
                 vm.$confirm('确认删除').then(function () {
-                    get("/menu/delete?id="+id).then(function (response) {
+                    get("/role/delete?id="+id).then(function (response) {
                         if (response.code === 200) {
                             vm.$message({
                                 message: '成功',
