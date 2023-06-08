@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author ：daxij1
@@ -27,7 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/role")
 @DS("manageboot")
-@Auth(role = "超级管理员")
+@Auth(role = "系统管理员")
 public class RoleController {
     
     @Autowired
@@ -42,6 +43,15 @@ public class RoleController {
         PageHelper.startPage(param.getPageno(), param.getPagesize());
         List<Role> list = roleService.list(queryWrapper);
         return ResponseVO.success(new PageInfo<>(list));
+    }
+
+    @GetMapping("/userOwnList")
+    public ResponseVO<List<Integer>> list(Integer userid){
+        if ((userid == null)) {
+            return ResponseVO.paramFail("用户id不能为空");
+        }
+        List<Role> roleList = roleService.findUserOwnRoleList(userid);
+        return ResponseVO.success(roleList.stream().map(Role::getId).collect(Collectors.toList()));
     }
 
     @PostMapping("/addOrUpdate")

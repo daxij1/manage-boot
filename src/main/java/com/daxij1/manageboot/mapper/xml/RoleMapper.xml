@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.daxij1.manageboot.mapper.RoleMapper">
+    
+    <select id="findUserOwnRoleList" resultType="com.daxij1.manageboot.pojo.entity.Role" parameterType="java.lang.Integer">
+        SELECT * FROM T_ROLE WHERE ID IN (
+            SELECT roleid FROM T_ROLE_USERBINDING WHERE userid = #{userid}
+        )
+    </select>
 
 </mapper>

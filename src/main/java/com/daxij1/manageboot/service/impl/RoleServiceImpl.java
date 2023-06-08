@@ -6,6 +6,8 @@ import com.daxij1.manageboot.pojo.entity.Role;
 import com.daxij1.manageboot.service.RoleService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author ：daxij1
  * @date ：Created in 2023/6/2 14:06
@@ -14,4 +16,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
+    @Override
+    public List<Role> findUserOwnRoleList(Integer userid) {
+        return baseMapper.findUserOwnRoleList(userid);
+    }
+    
 }

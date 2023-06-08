@@ -22,6 +22,10 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (handler instanceof HandlerMethod) {
             SessionUserDTO sessionUser = (SessionUserDTO) request.getSession().getAttribute("user");
             List<String> roles = sessionUser.getRoles();
+            // 超级管理员不受@Auth限制，具备所有权限
+            if (roles.contains("超级管理员")) { 
+                return true;
+            }
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             // 优先读取方法上@Auth
             Auth authAnnotation = handlerMethod.getMethodAnnotation(Auth.class);

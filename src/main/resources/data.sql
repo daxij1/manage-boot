@@ -18,7 +18,8 @@ insert into `T_MENU` VALUES (5, '权限管理', 2, 1, 'auth.html','', '系统配
 --  T_ROLE  --
 --          --
 insert into `T_ROLE` VALUES (1, '超级管理员', '超级管理员', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-insert into `T_ROLE` VALUES (2, '普通用户', '普通用户', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+insert into `T_ROLE` VALUES (2, '系统管理员', '系统管理员', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+insert into `T_ROLE` VALUES (3, '普通用户', '普通用户', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --          --
 --  T_ROLE_USERBINDING  --

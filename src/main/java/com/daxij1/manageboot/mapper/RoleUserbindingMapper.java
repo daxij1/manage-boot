@@ -19,5 +19,7 @@ import java.util.List;
 public interface RoleUserbindingMapper extends BaseMapper<RoleUserbinding> {
 
     List<String> findRoleNamesByUserId(@Param("userid") Integer userid);
+    
+    List<Integer> findRoleIdsByUserId(@Param("userid") Integer userid);
 
 }

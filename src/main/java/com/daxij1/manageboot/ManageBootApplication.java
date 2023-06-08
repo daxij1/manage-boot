@@ -2,6 +2,7 @@ package com.daxij1.manageboot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @author ：daxij1
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description：Application
  */
 @SpringBootApplication
+@EnableTransactionManagement
 public class ManageBootApplication {
 
     public static void main(String[] args) {

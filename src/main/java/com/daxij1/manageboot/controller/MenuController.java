@@ -27,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/menu")
 @DS("manageboot")
-@Auth(role = "超级管理员")
+@Auth(role = "系统管理员")
 public class MenuController {
     
     @Autowired

@@ -11,6 +11,7 @@ import com.daxij1.manageboot.pojo.entity.User;
 import com.daxij1.manageboot.pojo.param.LoginFormParam;
 import com.daxij1.manageboot.pojo.param.UserAddOrUpdateParam;
 import com.daxij1.manageboot.pojo.param.UserQueryParam;
+import com.daxij1.manageboot.pojo.param.UserRoleUpdateParam;
 import com.daxij1.manageboot.service.RoleUserbindingService;
 import com.daxij1.manageboot.service.UserService;
 import com.github.pagehelper.PageHelper;
@@ -33,7 +34,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @DS("manageboot")
-@Auth(role = "超级管理员")
+@Auth(role = "系统管理员")
 public class UserController {
 
     @Autowired
@@ -104,6 +105,12 @@ public class UserController {
         user.setId(id);
         user.setDel(1);
         userService.updateById(user);
+        return ResponseVO.success();
+    }
+    
+    @RequestMapping("/updateRole")
+    public ResponseVO<Object> updateRole(@Valid @RequestBody UserRoleUpdateParam param){
+        roleUserbindingService.updateRolesForUser(param.getUserid(), param.getRoleIds());
         return ResponseVO.success();
     }
 

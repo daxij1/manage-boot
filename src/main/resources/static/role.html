@@ -38,10 +38,10 @@
                 <el-table-column prop="name" label="角色名称" width="130px"></el-table-column>
                 <el-table-column prop="descr" label="描述"></el-table-column>
                 <el-table-column prop="createtime" label="createtime" width="230px"></el-table-column>
-                <el-table-column align="right" label="操作" width="150px">
+                <el-table-column align="right" label="操作" width="110px">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="warning" @click="popEditDialog(scope.row)">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+                        <el-button size="mini" type="warning" icon="el-icon-edit" circle @click="popEditDialog(scope.row)"></el-button>
+                        <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.row.id)"></el-button>
                     </template>
                 </el-table-column>
             </el-table>

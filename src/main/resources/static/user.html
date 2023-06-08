@@ -42,8 +42,9 @@
                 <el-table-column prop="createtime" label="createtime" width="230px"></el-table-column>
                 <el-table-column align="right" label="操作" width="150px">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="warning" @click="popEditDialog(scope.row)">编辑</el-button>
-                        <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+                        <el-button size="mini" type="primary" icon="el-icon-user" circle @click="popRoleDialog(scope.row)"></el-button>
+                        <el-button size="mini" type="warning" icon="el-icon-edit" circle @click="popEditDialog(scope.row)"></el-button>
+                        <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.row.id)"></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -77,6 +78,19 @@
             <el-button type="primary" @click="handleAddOrUpdate">确 定</el-button>
         </div>
     </el-dialog>
+
+    <el-dialog :title="dialogTitle" :visible.sync="dialogRoleFormVisible">
+        <el-form :model="userRoleItem">
+            <input type="hidden" v-model="userRoleItem.userid" autocomplete="off"/>
+            <el-checkbox-group v-model="userRoleItem.roleIds">
+                <el-checkbox v-for="(item,index) in roleList" :label="item.id">{{item.name}}</el-checkbox>
+            </el-checkbox-group>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogRoleFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="updateRole">确 定</el-button>
+        </div>
+    </el-dialog>
 </div>
 </body>
 <script>
@@ -91,8 +105,14 @@
                 tableData: [],
                 pages: { total: 0 },
                 dialogFormVisible: false,
+                dialogRoleFormVisible: false,
                 dialogTitle: "新增",
-                curItem: {}
+                curItem: {},
+                userRoleItem: {
+                    userid: 0,
+                    roleIds: []
+                },
+                roleList: []
             }
         },
         methods: {
@@ -122,6 +142,19 @@
                     }
                 });
             },
+            updateRole: function(){
+                post("/user/updateRole", vm.userRoleItem).then(function (response) {
+                    if (response.code === 200) {
+                        vm.$message({
+                            message: '成功',
+                            type: 'success'
+                        });
+                        vm.dialogRoleFormVisible = false;
+                    } else {
+                        vm.$message.error(response.msg);
+                    }
+                });
+            },
             // 重置查询
             resetQuery: function(){
                 vm.query = {
@@ -140,6 +173,20 @@
                 vm.curItem = JSON.parse(JSON.stringify(row));
                 vm.dialogTitle = '编辑';
                 vm.dialogFormVisible = true;
+            },
+            // 角色配置弹窗
+            popRoleDialog: function (row) {
+                get("/role/userOwnList?userid=" + row.id).then(function (response) {
+                    if (response.code === 200) {
+                        vm.userRoleItem.userid = row.id;
+                        vm.userRoleItem.roleIds = response.data;
+                        vm.curItem = JSON.parse(JSON.stringify(row));
+                        vm.dialogTitle = '角色配置';
+                        vm.dialogRoleFormVisible = true;
+                    } else {
+                        vm.$message.error(response.msg);
+                    }
+                });
             },
             // 删除
             handleDelete: function (id) {
@@ -176,9 +223,19 @@
                     type: 'success',
                     message: '已复制到剪贴板'
                 });
+            },
+            loadRoleList: function () {
+                post("/role/list", {pageno: 1, pagesize: 200}).then(function (response) {
+                    if (response.code === 200) {
+                        vm.roleList = response.data.list;
+                    } else {
+                        vm.$message.error(response.msg);
+                    }
+                });
             }
         }
     });
     vm.loadList();
+    vm.loadRoleList();
 </script>
 </html>

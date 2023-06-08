@@ -13,4 +13,7 @@ import java.util.List;
 public interface RoleUserbindingService extends IService<RoleUserbinding> {
 
     List<String> findRoleNamesByUserId(Integer userId);
+    
+    void updateRolesForUser(Integer userid, List<Integer> roleIds);
+    
 }
