@@ -9,7 +9,7 @@
         SELECT t3.roleid FROM T_ROLE_USERBINDING t3 WHERE t3.userid = #{userid}
         )
         )
-        AND t1.active = 1
+        AND t1.del = 0
         <if test="level != null">
             AND t1.level = #{level}
         </if>

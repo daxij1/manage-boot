@@ -1,5 +1,6 @@
 package com.daxij1.manageboot.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daxij1.manageboot.mapper.MenuMapper;
 import com.daxij1.manageboot.pojo.dto.MenuDTO;
 import com.daxij1.manageboot.pojo.entity.Menu;
@@ -7,7 +8,6 @@ import com.daxij1.manageboot.service.MenuService;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,23 +21,20 @@ import java.util.stream.Collectors;
  * @description：MenuServiceImpl
  */
 @Service
-public class MenuServiceImpl implements MenuService {
-
-    @Autowired
-    private MenuMapper menuMapper;
+public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
     @Override
     public Pair<List<MenuDTO>, List<Menu>> findUserMenuList(long userid) {
         List<MenuDTO> menuTreeList = new ArrayList<>();
         // 1.查询一级菜单目录
-        List<Menu> firstMenuList = menuMapper.selectListByUserid(userid, 1);
+        List<Menu> firstMenuList = getBaseMapper().selectListByUserid(userid, 1);
         for (Menu menu : firstMenuList) {
             MenuDTO menuDTO = new MenuDTO();
             BeanUtils.copyProperties(menu, menuDTO);
             menuTreeList.add(menuDTO);
         }
         // 2.查询二级菜单项
-        List<Menu> secondMenuList = menuMapper.selectListByUserid(userid, 2);
+        List<Menu> secondMenuList = getBaseMapper().selectListByUserid(userid, 2);
         Map<Integer, List<Menu>> secondGroupMenuMap = secondMenuList.stream().collect(Collectors.groupingBy(Menu::getParentid));
         // 3.将二级菜单项设置为一级菜单目录子菜单属性
         for (MenuDTO menuDTO : menuTreeList) {

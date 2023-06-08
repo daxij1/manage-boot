@@ -46,12 +46,6 @@ public class Menu implements Serializable {
     private Integer level;
 
     /**
-     * 菜单类型 1-目录型 2-菜单项
-     */
-    @TableField("TYPE")
-    private Integer type;
-
-    /**
      * 父级菜单id
      */
     @TableField("PARENTID")
@@ -76,10 +70,10 @@ public class Menu implements Serializable {
     private String descr;
 
     /**
-     * 启用标志，0停用1启用
+     * 删除标志，1删除
      */
-    @TableField("ACTIVE")
-    private Integer active;
+    @TableField("DEL")
+    private Integer del;
 
     /**
      * 排序字段
