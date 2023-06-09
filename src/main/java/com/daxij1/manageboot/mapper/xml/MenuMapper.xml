@@ -16,4 +16,8 @@
         order by t1.sort
     </select>
 
+    <select id="selectListByLevel" resultType="com.daxij1.manageboot.pojo.entity.Menu" parameterType="Integer">
+        SELECT * FROM T_MENU WHERE level = #{level}
+    </select>
+
 </mapper>

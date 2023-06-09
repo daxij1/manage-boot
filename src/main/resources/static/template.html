@@ -24,9 +24,9 @@
     <div class="grid-content">
         <template>
             <el-form :inline="true">
-                <el-form-item label="名称:">
+                <!--<el-form-item label="名称:">
                     <el-input v-model="query.name" placeholder="名称" style="width: 300px"></el-input>
-                </el-form-item>
+                </el-form-item>-->
                 <el-form-item>
                     <el-button type="primary" @click="loadList">查询</el-button>
                     <el-button @click="resetQuery">重置</el-button>
@@ -34,13 +34,12 @@
                 </el-form-item>
             </el-form>
             <el-table :data="tableData" border style="width: 100%">
-                <el-table-column fixed prop="id" label="id" width="130px"></el-table-column>
+                <!--<el-table-column fixed prop="id" label="id" width="130px"></el-table-column>
                 <el-table-column prop="name" label="角色名称" width="130px"></el-table-column>
                 <el-table-column prop="descr" label="描述"></el-table-column>
-                <el-table-column prop="createtime" label="createtime" width="230px"></el-table-column>
-                <el-table-column align="right" label="操作" width="150px">
+                <el-table-column prop="createtime" label="createtime" width="230px"></el-table-column>-->
+                <el-table-column align="right" label="操作" width="110px">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" icon="el-icon-menu" circle @click="popMenuDialog(scope.row)"></el-button>
                         <el-button size="mini" type="warning" icon="el-icon-edit" circle @click="popEditDialog(scope.row)"></el-button>
                         <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.row.id)"></el-button>
                     </template>
@@ -61,30 +60,16 @@
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
         <el-form :model="curItem">
             <input type="hidden" v-model="curItem.id" autocomplete="off"/>
-            <el-form-item class="is-required" label="角色名称：" label-width="120px">
+            <!--<el-form-item class="is-required" label="角色名称：" label-width="120px">
                 <el-input v-model="curItem.name" autocomplete="off" placeholder="角色名称"></el-input>
             </el-form-item>
             <el-form-item class="is-required" label="描述：" label-width="120px">
                 <el-input v-model="curItem.descr" autocomplete="off" placeholder="描述"></el-input>
-            </el-form-item>
+            </el-form-item>-->
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button type="primary" @click="handleAddOrUpdate">确 定</el-button>
-        </div>
-    </el-dialog>
-
-    <el-dialog :title="dialogTitle" :visible.sync="dialogMenuFormVisible">
-        <el-tree
-                :data="treeData"
-                show-checkbox
-                node-key="id"
-                :default-checked-keys="ownMenuIds"
-                :props="defaultProps">
-        </el-tree>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogMenuFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="updateMenu">确 定</el-button>
         </div>
     </el-dialog>
 </div>
@@ -101,21 +86,14 @@
                 tableData: [],
                 pages: { total: 0 },
                 dialogFormVisible: false,
-                dialogMenuFormVisible: false,
                 dialogTitle: "新增",
-                curItem: {},
-                treeData: [],
-                defaultProps: {
-                    children: 'children',
-                    label: 'name'
-                },
-                ownMenuIds:[]
+                curItem: {}
             }
         },
         methods: {
             // 列表
             loadList: function () {
-                post("/role/list", vm.query).then(function (response) {
+                post("/template/list", vm.query).then(function (response) {
                     if (response.code === 200) {
                         vm.pages.total = response.data.total;
                         vm.tableData = response.data.list;
@@ -126,7 +104,7 @@
             },
             // 新增或更新
             handleAddOrUpdate: function(){
-                post("/role/addOrUpdate", vm.curItem).then(function (response) {
+                post("/template/addOrUpdate", vm.curItem).then(function (response) {
                     if (response.code === 200) {
                         vm.$message({
                             message: '成功',
@@ -181,41 +159,9 @@
             handleCurrentChange: function (val) {
                 vm.query.pageno = val;
                 vm.loadList();
-            },
-            // 菜单配置弹窗
-            popMenuDialog: function (row) {
-                vm.dialogTitle = '菜单配置';
-                vm.dialogMenuFormVisible = true;
-                /*get("/role/userOwnList?userid=" + row.id).then(function (response) {
-                    if (response.code === 200) {
-                        vm.userRoleItem.userid = row.id;
-                        vm.userRoleItem.roleIds = response.data;
-                        vm.curItem = JSON.parse(JSON.stringify(row));
-                        vm.dialogTitle = '角色配置';
-                        vm.dialogRoleFormVisible = true;
-                    } else {
-                        vm.$message.error(response.msg);
-                    }
-                });*/
-            },
-            updateMenu: function () {
-                console.log('111')
-            },
-            loadAllMenuList: function () {
-                get("/menu/treeList").then(function (response) {
-                    if (response.code === 200) {
-                        vm.treeData = response.data;
-                    } else {
-                        vm.$message.error(response.msg);
-                    }
-                });
-            },
-            loadOwnMenuIdList: function (roleId) {
-
             }
         }
     });
     vm.loadList();
-    vm.loadAllMenuList();
 </script>
 </html>

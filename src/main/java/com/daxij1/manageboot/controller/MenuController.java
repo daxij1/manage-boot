@@ -7,6 +7,7 @@ import com.daxij1.manageboot.framework.pojo.ResponseVO;
 import com.daxij1.manageboot.pojo.entity.Menu;
 import com.daxij1.manageboot.pojo.param.MenuAddOrUpdateParam;
 import com.daxij1.manageboot.pojo.param.MenuQueryParam;
+import com.daxij1.manageboot.pojo.vo.MenuTreeVO;
 import com.daxij1.manageboot.service.MenuService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -45,6 +46,16 @@ public class MenuController {
         PageHelper.startPage(param.getPageno(), param.getPagesize());
         List<Menu> list = menuService.list(queryWrapper);
         return ResponseVO.success(new PageInfo<>(list));
+    }
+
+    @GetMapping("/treeList")
+    public ResponseVO<List<MenuTreeVO>> treeList(){
+        return ResponseVO.success(menuService.treeMenuList());
+    }
+
+    @GetMapping("/userOwnList")
+    public ResponseVO<List<Integer>> userOwnList(Integer userid){
+        return ResponseVO.success();
     }
 
     @PostMapping("/addOrUpdate")

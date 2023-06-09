@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daxij1.manageboot.mapper.MenuMapper;
 import com.daxij1.manageboot.pojo.dto.MenuDTO;
 import com.daxij1.manageboot.pojo.entity.Menu;
+import com.daxij1.manageboot.pojo.vo.MenuTreeVO;
 import com.daxij1.manageboot.service.MenuService;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -41,6 +42,30 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             menuDTO.setMenuList(secondGroupMenuMap.get(menuDTO.getId()));
         }
         return ImmutablePair.of(menuTreeList, secondMenuList);
+    }
+
+    @Override
+    public List<MenuTreeVO> treeMenuList() {
+        List<MenuTreeVO> menuTreeVOList = new ArrayList<>();
+        List<Menu> firstMenuList = getBaseMapper().selectListByLevel(1);
+        for (Menu menu : firstMenuList) {
+            MenuTreeVO menuTreeVO = new MenuTreeVO();
+            BeanUtils.copyProperties(menu, menuTreeVO);
+            menuTreeVOList.add(menuTreeVO);
+        }
+        List<Menu> secondMenuList = getBaseMapper().selectListByLevel(2);
+        Map<Integer, List<Menu>> secondGroupMenuMap = secondMenuList.stream().collect(Collectors.groupingBy(Menu::getParentid));
+        for (MenuTreeVO menuTreeVO : menuTreeVOList) {
+            List<Menu> menuList = secondGroupMenuMap.get(menuTreeVO.getId());
+            List<MenuTreeVO> childMenuTreeVOList = new ArrayList<>();
+            for (Menu menu : menuList) {
+                MenuTreeVO item = new MenuTreeVO();
+                BeanUtils.copyProperties(menu, item);
+                childMenuTreeVOList.add(item);
+            }
+            menuTreeVO.setChildren(childMenuTreeVOList);
+        }
+        return menuTreeVOList;
     }
 
 }

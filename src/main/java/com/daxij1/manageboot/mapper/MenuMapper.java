@@ -23,5 +23,10 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @param level  菜单级别
      */
     List<Menu> selectListByUserid(@Param("userid") long userid, @Param("level") int level);
+    
+    /**
+     * @param level 菜单级别
+     * */
+    List<Menu> selectListByLevel(@Param("level") int level);
 
 }
