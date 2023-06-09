@@ -25,4 +25,6 @@ public interface MenuService extends IService<Menu> {
      * */
     List<MenuTreeVO> treeMenuList();
 
+    List<Menu> findByLevel(Integer level);
+
 }

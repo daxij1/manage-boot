@@ -37,10 +37,10 @@
                 <el-table-column fixed prop="id" label="id" width="130px"></el-table-column>
                 <el-table-column prop="name" label="角色名称" width="130px"></el-table-column>
                 <el-table-column prop="descr" label="描述"></el-table-column>
-                <el-table-column prop="createtime" label="createtime" width="230px"></el-table-column>
+                <el-table-column prop="createtime" label="创建时间" width="230px"></el-table-column>
                 <el-table-column align="right" label="操作" width="150px">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" icon="el-icon-menu" circle @click="popMenuDialog(scope.row)"></el-button>
+                        <el-button size="mini" type="primary" icon="el-icon-menu" circle @click="popAuthDialog(scope.row)"></el-button>
                         <el-button size="mini" type="warning" icon="el-icon-edit" circle @click="popEditDialog(scope.row)"></el-button>
                         <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDelete(scope.row.id)"></el-button>
                     </template>
@@ -74,17 +74,22 @@
         </div>
     </el-dialog>
 
-    <el-dialog :title="dialogTitle" :visible.sync="dialogMenuFormVisible">
+    <!--
+    el-dialog的坑，通过default-checked-keys绑定变量值会有问题，通过组件的setCheckedKeys来处理
+    这里要通过opened回调来处理默认选中，因为只有渲染完才能获取到ref，也是el-dialog的一个坑，整了仨小时才整出来
+    -->
+    <el-dialog :title="dialogTitle" :visible.sync="dialogMenuFormVisible" @opened="openedAuthDialog">
+        <input type="hidden" v-model="curRoleid" autocomplete="off"/>
         <el-tree
+                ref="tree"
                 :data="treeData"
                 show-checkbox
                 node-key="id"
-                :default-checked-keys="ownMenuIds"
                 :props="defaultProps">
         </el-tree>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogMenuFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="updateMenu">确 定</el-button>
+            <el-button type="primary" @click="updateAuth">确 定</el-button>
         </div>
     </el-dialog>
 </div>
@@ -109,7 +114,7 @@
                     children: 'children',
                     label: 'name'
                 },
-                ownMenuIds:[]
+                curRoleid: null
             }
         },
         methods: {
@@ -182,24 +187,46 @@
                 vm.query.pageno = val;
                 vm.loadList();
             },
-            // 菜单配置弹窗
-            popMenuDialog: function (row) {
-                vm.dialogTitle = '菜单配置';
+            // 权限配置弹窗
+            popAuthDialog: function (row) {
+                vm.dialogTitle = '菜单权限配置-' + row.name;
                 vm.dialogMenuFormVisible = true;
-                /*get("/role/userOwnList?userid=" + row.id).then(function (response) {
+                vm.curRoleid = row.id;
+            },
+            // 权限弹框open事件
+            openedAuthDialog: function () {
+                let tree = this.$refs.tree;
+                get("/auth/roleOwnMenuIdList?roleid=" + vm.curRoleid).then(function (response) {
                     if (response.code === 200) {
-                        vm.userRoleItem.userid = row.id;
-                        vm.userRoleItem.roleIds = response.data;
-                        vm.curItem = JSON.parse(JSON.stringify(row));
-                        vm.dialogTitle = '角色配置';
-                        vm.dialogRoleFormVisible = true;
+                        tree.setCheckedKeys(response.data, false);
                     } else {
                         vm.$message.error(response.msg);
                     }
-                });*/
+                });
             },
-            updateMenu: function () {
-                console.log('111')
+            updateAuth: function () {
+                // 获取选中的节点
+                let checkedKeys = this.$refs.tree.getCheckedKeys();
+                // 获取选中的父节点(半选中)
+                let halfCheckedKeys = this.$refs.tree.getHalfCheckedKeys();
+                // 组合
+                let menuIds = checkedKeys.concat(halfCheckedKeys);
+                let authParam = {
+                    roleid: vm.curRoleid,
+                    menuIds: menuIds
+                };
+                post("/auth/update", authParam).then(function (response) {
+                    if (response.code === 200) {
+                        vm.$message({
+                            message: '成功',
+                            type: 'success'
+                        });
+                        vm.dialogMenuFormVisible = false;
+                        vm.loadList();
+                    } else {
+                        vm.$message.error(response.msg);
+                    }
+                });
             },
             loadAllMenuList: function () {
                 get("/menu/treeList").then(function (response) {
@@ -209,9 +236,6 @@
                         vm.$message.error(response.msg);
                     }
                 });
-            },
-            loadOwnMenuIdList: function (roleId) {
-
             }
         }
     });

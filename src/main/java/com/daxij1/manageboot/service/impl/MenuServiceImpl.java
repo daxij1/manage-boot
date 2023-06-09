@@ -1,5 +1,6 @@
 package com.daxij1.manageboot.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daxij1.manageboot.mapper.MenuMapper;
 import com.daxij1.manageboot.pojo.dto.MenuDTO;
@@ -66,6 +67,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             menuTreeVO.setChildren(childMenuTreeVOList);
         }
         return menuTreeVOList;
+    }
+
+    @Override
+    public List<Menu> findByLevel(Integer level) {
+        return getBaseMapper().selectListByLevel(level);
     }
 
 }
