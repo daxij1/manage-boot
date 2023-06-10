@@ -70,11 +70,12 @@
             <div class="userinfo el-col-4">
                 <el-dropdown @command="handleDropDownCommand">
                     <span class="el-dropdown-link userinfo-inner el-dropdown-selfdefine">
-                      <img th:src="${sessionUser.avator}"/>[[${sessionUser.nickname}]]
+                        <img :src="user.avator"/>{{user.nickname}}
                     </span>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-edit-outline" command="settings">修改信息</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-unlock" command="password">修改密码</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-edit-outline" command="userinfo">个人信息</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-switch-button" command="logout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -103,14 +104,81 @@
             </el-container>
         </el-container>
     </el-container>
+
+    <el-dialog :title="dialogTitle" :visible.sync="userDialogFormVisible">
+        <el-form>
+            <el-form-item class="is-required" label="昵称：" label-width="120px">
+                <el-input v-model="userinfo.nickname"
+                          autocomplete="off"
+                          placeholder="昵称"></el-input>
+            </el-form-item>
+            <el-form-item class="is-required" label="头像：" label-width="120px">
+                <el-input v-model="userinfo.avator"
+                          autocomplete="off"
+                          placeholder="头像"
+                ></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="userDialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="updateUserInfo">确 定</el-button>
+        </div>
+    </el-dialog>
+
+    <el-dialog :title="dialogTitle" :visible.sync="passwordDialogFormVisible">
+        <el-form>
+            <el-form-item class="is-required" label="输入旧密码：" label-width="120px">
+                <el-input v-model="passwordInfo.old"
+                          autocomplete="off"
+                          placeholder="输入旧密码"></el-input>
+            </el-form-item>
+            <el-form-item class="is-required" label="输入新密码：" label-width="120px">
+                <el-input v-model="passwordInfo.nnew"
+                          show-password
+                          autocomplete="off"
+                          placeholder="输入新密码"
+                ></el-input>
+            </el-form-item>
+            <el-form-item class="is-required" label="确认新密码：" label-width="120px">
+                <el-input v-model="passwordInfo.confirmNew"
+                          show-password
+                          autocomplete="off"
+                          placeholder="确认新密码"
+                ></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="passwordDialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="updatePassword">确 定</el-button>
+        </div>
+    </el-dialog>
 </div>
 </body>
 <script>
+    let loginUserId = [[${sessionUser.id}]]
+    let loginUserNickname = '[[${sessionUser.nickname}]]'
+    let loginUserAvator = '[[${sessionUser.avator}]]'
     let vm = new Vue({
         el: '#app',
         data: function () {
             return {
-                module: [[${defaultModule}]]
+                module: [[${defaultModule}]],
+                user: {
+                    nickname: loginUserNickname,
+                    avator: loginUserAvator
+                },
+                dialogTitle: "用户信息",
+                userDialogFormVisible: false,
+                passwordDialogFormVisible: false,
+                userinfo: {
+                    nickname: null,
+                    avator: null,
+                },
+                passwordInfo: {
+                    old: null,
+                    nnew: null,
+                    confirmNew: null
+                }
             }
         },
         methods: {
@@ -124,7 +192,41 @@
                             vm.$message.error(response.msg);
                         }
                     });
+                } else if (command === "userinfo") {
+                    vm.userinfo.avator = vm.user.avator;
+                    vm.userinfo.nickname = vm.user.nickname;
+                    vm.userDialogFormVisible = true;
+                } else if (command === "password") {
+                    vm.passwordDialogFormVisible = true;
                 }
+            },
+            updateUserInfo() {
+                post("/user/updateInfo", vm.userinfo).then(function (response) {
+                    if (response.code === 200) {
+                        vm.$message({
+                            message: '成功',
+                            type: 'success'
+                        });
+                        vm.userDialogFormVisible = false;
+                        vm.user.avator = vm.userinfo.avator;
+                        vm.user.nickname = vm.userinfo.nickname;
+                    } else {
+                        vm.$message.error(response.msg);
+                    }
+                });
+            },
+            updatePassword() {
+                post("/user/updatePassword", vm.passwordInfo).then(function (response) {
+                    if (response.code === 200) {
+                        vm.$message({
+                            message: '成功',
+                            type: 'success'
+                        });
+                        vm.passwordDialogFormVisible = false;
+                    } else {
+                        vm.$message.error(response.msg);
+                    }
+                });
             }
         }
     });

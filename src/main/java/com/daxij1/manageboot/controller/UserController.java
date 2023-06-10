@@ -5,13 +5,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.daxij1.manageboot.framework.annotation.Auth;
 import com.daxij1.manageboot.framework.exeception.ServiceException;
 import com.daxij1.manageboot.framework.pojo.ResponseVO;
-import com.daxij1.manageboot.framework.util.AesUtil;
 import com.daxij1.manageboot.pojo.dto.SessionUserDTO;
 import com.daxij1.manageboot.pojo.entity.User;
-import com.daxij1.manageboot.pojo.param.LoginFormParam;
-import com.daxij1.manageboot.pojo.param.UserAddOrUpdateParam;
-import com.daxij1.manageboot.pojo.param.UserQueryParam;
-import com.daxij1.manageboot.pojo.param.UserRoleUpdateParam;
+import com.daxij1.manageboot.pojo.param.*;
 import com.daxij1.manageboot.service.RoleUserbindingService;
 import com.daxij1.manageboot.service.UserService;
 import com.github.pagehelper.PageHelper;
@@ -22,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -74,9 +71,6 @@ public class UserController {
         }
         PageHelper.startPage(param.getPageno(), param.getPagesize());
         List<User> list = userService.list(queryWrapper);
-        for (User user : list) {
-            user.setPassword(AesUtil.decode(user.getPassword()));
-        }
         return ResponseVO.success(new PageInfo<>(list));
     }
 
@@ -85,7 +79,6 @@ public class UserController {
         Integer id = param.getId();
         User user = new User();
         BeanUtils.copyProperties(param, user);
-        user.setPassword(AesUtil.encode(user.getPassword()));
         if (id != null) { //更新
             user.setLastmodifiedtime(new Date());
             userService.updateById(user);
@@ -111,6 +104,23 @@ public class UserController {
     @RequestMapping("/updateRole")
     public ResponseVO<Object> updateRole(@Valid @RequestBody UserRoleUpdateParam param){
         roleUserbindingService.updateRolesForUser(param.getUserid(), param.getRoleIds());
+        return ResponseVO.success();
+    }
+
+    @RequestMapping("/updateInfo")
+    public ResponseVO<Object> updateInfo(@Valid @RequestBody UserInfoUpdateParam param, HttpSession session){
+        SessionUserDTO sessionUser = (SessionUserDTO) session.getAttribute("user");
+        userService.updateUserInfo(sessionUser, param);
+        return ResponseVO.success();
+    }
+
+    @RequestMapping("/updatePassword")
+    public ResponseVO<Object> updatePassword(@Valid @RequestBody PasswordUpdateParam param, HttpSession session) throws ServiceException {
+        if (!StringUtils.equals(param.getNnew(), param.getConfirmNew())) {
+            return ResponseVO.paramFail("两次密码输入不一致");
+        }
+        SessionUserDTO sessionUser = (SessionUserDTO) session.getAttribute("user");
+        userService.updatePassword(sessionUser.getId(), param.getOld(), param.getNnew());
         return ResponseVO.success();
     }
 

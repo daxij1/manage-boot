@@ -36,7 +36,7 @@
             <el-table :data="tableData" border style="width: 100%">
                 <el-table-column fixed prop="id" label="id" width="130px"></el-table-column>
                 <el-table-column prop="username" label="用户名" width="130px"></el-table-column>
-                <el-table-column prop="password" label="密码"></el-table-column>
+                <el-table-column prop="password" label="密码(加密)"></el-table-column>
                 <el-table-column prop="avator" label="头像"></el-table-column>
                 <el-table-column prop="nickname" label="昵称"></el-table-column>
                 <el-table-column prop="createtime" label="创建时间" width="230px"></el-table-column>
@@ -66,8 +66,8 @@
             <el-form-item class="is-required" label="用户名：" label-width="120px">
                 <el-input v-model="curItem.username" autocomplete="off" placeholder="用户名"></el-input>
             </el-form-item>
-            <el-form-item class="is-required" label="密码：" label-width="120px">
-                <el-input v-model="curItem.password" autocomplete="off" placeholder="密码"></el-input>
+            <el-form-item class="is-required" label="密码(加密)：" label-width="120px">
+                <el-input v-model="curItem.password" autocomplete="off" placeholder="密码(加密)："></el-input>
             </el-form-item>
             <el-form-item class="is-required" label="昵称：" label-width="120px">
                 <el-input v-model="curItem.nickname" autocomplete="off" placeholder="昵称"></el-input>
