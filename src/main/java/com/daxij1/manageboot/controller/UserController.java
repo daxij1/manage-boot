@@ -1,5 +1,6 @@
 package com.daxij1.manageboot.controller;
 
+import cn.hutool.core.io.file.FileNameUtil;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.daxij1.manageboot.framework.annotation.Auth;
@@ -15,6 +16,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +33,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @DS("manageboot")
-@Auth(role = "系统管理员")
 public class UserController {
+
+    @Value("${local-file.address}")
+    private String fileAddress;
 
     @Autowired
     private UserService userService;
@@ -52,6 +56,10 @@ public class UserController {
         SessionUserDTO sessionUser = new SessionUserDTO();
         BeanUtils.copyProperties(user, sessionUser);
         sessionUser.setRoles(roles);
+        String avator = sessionUser.getAvator();
+        if (!StringUtils.startsWith(avator, "http") && !StringUtils.startsWith(avator, ".")) {
+            sessionUser.setAvator(fileAddress + avator);
+        }
         request.getSession().setAttribute("user", sessionUser);
         return ResponseVO.success();
     }
@@ -63,6 +71,7 @@ public class UserController {
     }
     
     @PostMapping("/list")
+    @Auth(role = "系统管理员")
     public ResponseVO<PageInfo<User>> list(@Valid @RequestBody UserQueryParam param){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("del", 0);
@@ -71,10 +80,17 @@ public class UserController {
         }
         PageHelper.startPage(param.getPageno(), param.getPagesize());
         List<User> list = userService.list(queryWrapper);
+        for (User user : list) {
+            String avator = user.getAvator();
+            if (!StringUtils.startsWith(avator, "http") && !StringUtils.startsWith(avator, ".")) {
+                user.setAvator(fileAddress + avator);
+            }
+        }
         return ResponseVO.success(new PageInfo<>(list));
     }
 
     @PostMapping("/addOrUpdate")
+    @Auth(role = "系统管理员")
     public ResponseVO<Object> addOrUpdate(@Valid @RequestBody UserAddOrUpdateParam param){
         Integer id = param.getId();
         User user = new User();
@@ -90,6 +106,7 @@ public class UserController {
     }
 
     @GetMapping("/delete")
+    @Auth(role = "系统管理员")
     public ResponseVO<Object> delete(Integer id){
         if (id == null || id <= 0) {
             return ResponseVO.paramFail("用户id有误");
@@ -102,6 +119,7 @@ public class UserController {
     }
     
     @RequestMapping("/updateRole")
+    @Auth(role = "系统管理员")
     public ResponseVO<Object> updateRole(@Valid @RequestBody UserRoleUpdateParam param){
         roleUserbindingService.updateRolesForUser(param.getUserid(), param.getRoleIds());
         return ResponseVO.success();

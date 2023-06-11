@@ -13,5 +13,7 @@ public class MenuQueryParam extends PageQueryParam {
     private Integer level;
     
     private String name;
+
+    private Integer parentid;
     
 }

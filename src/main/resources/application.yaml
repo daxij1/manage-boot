@@ -5,6 +5,14 @@ server:
       # tomcat的默认session超时时间单位是分，不满一分钟则四舍五入，如设置30s，则实际为1分钟
       # 单位可以是s、m、h、d
       timeout: 5d
+# 本地文件服务器
+local-file:
+  # 端口
+  port: 9998
+  # 上传路径
+  root: ${user.dir}/files/
+  # 访问路径
+  address: http://localhost:${local-file.port}/
 spring:
   profiles:
     active: dev
@@ -43,7 +51,7 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true #开启驼峰功能
     auto-mapping-behavior: full #自动填充
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #控制台打印sql
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #控制台打印sql
   mapper-locations: classpath*:com/daxij1/manageboot/mapper/**/*Mapper.xml #将配置路径下的*.xml文件加载到mybatis中
   global-config:
     # 逻辑删除配置

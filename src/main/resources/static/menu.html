@@ -21,16 +21,18 @@
     <div class="grid-content">
         <template>
             <el-form :inline="true">
-                <el-form-item>
-                    <el-col style="width: 120px">菜单层级：</el-col>
-                    <el-select v-model="query.level" placeholder="请选择菜单层级" style="width: 300px">
-                        <el-option key="" label="全部" value=""></el-option>
-                        <el-option key="1" label="一级" value="1"></el-option>
-                        <el-option key="2" label="二级" value="2"></el-option>
+                <el-form-item label="菜单层级:">
+                    <el-select v-model="query.level" placeholder="请选择菜单层级" style="width: 200px">
+                        <el-option label="全部" value=""></el-option>
+                        <el-option label="一级" value="1"></el-option>
+                        <el-option label="二级" value="2"></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item label="父级菜单id:">
+                    <el-input v-model="query.parentid" placeholder="父级菜单id" style="width: 200px"></el-input>
+                </el-form-item>
                 <el-form-item label="菜单名称:">
-                    <el-input v-model="query.name" placeholder="菜单名称" style="width: 300px"></el-input>
+                    <el-input v-model="query.name" placeholder="菜单名称" style="width: 200px"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="loadList">查询</el-button>
@@ -43,7 +45,11 @@
                 <el-table-column prop="name" label="菜单名称" width="130px"></el-table-column>
                 <el-table-column prop="level" label="菜单级别" width="100px"></el-table-column>
                 <el-table-column prop="parentid" label="父级菜单id"></el-table-column>
-                <el-table-column prop="icon" label="图标"></el-table-column>
+                <el-table-column label="图标">
+                    <template slot-scope="scope">
+                        <i :class="scope.row.icon"></i>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="path" label="页面路径"></el-table-column>
                 <el-table-column prop="descr" label="描述"></el-table-column>
                 <el-table-column prop="sort" label="排序字段" width="100px"></el-table-column>
@@ -67,7 +73,7 @@
         </template>
     </div>
 
-    <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
+    <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="40%">
         <el-form :model="curItem">
             <input type="hidden" v-model="curItem.id" autocomplete="off"/>
             <el-form-item class="is-required" label="菜单名称：" label-width="120px">
@@ -75,15 +81,24 @@
             </el-form-item>
             <el-form-item class="is-required" label="菜单级别：" label-width="120px">
                 <el-select v-model="curItem.level" placeholder="请选择菜单层级" style="width: 100%">
-                    <el-option key="1" label="一级" value="1"></el-option>
-                    <el-option key="2" label="二级" value="2"></el-option>
+                    <el-option label="一级" value="1"></el-option>
+                    <el-option label="二级" value="2"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="父级菜单id：" label-width="120px">
                 <el-input v-model="curItem.parentid" autocomplete="off" placeholder="父级菜单id"></el-input>
             </el-form-item>
-            <el-form-item label="图标：" label-width="120px">
-                <el-input v-model="curItem.icon" autocomplete="off" placeholder="图标"></el-input>
+            <el-form-item>
+                <template>
+                    <label class="el-form-item__label" style="width: 120px">
+                        图标(<a
+                            href="https://element.eleme.cn/#/zh-CN/component/icon"
+                            style="color: #409EFF;text-decoration:none;"
+                            target="_blank">资源库</a>):</label>
+                    <div class="el-form-item__content" style="margin-left: 120px">
+                        <el-input v-model="curItem.icon" autocomplete="off" placeholder="图标"></el-input>
+                    </div>
+                </template>
             </el-form-item>
             <el-form-item label="页面路径：" label-width="120px">
                 <el-input v-model="curItem.path" autocomplete="off" placeholder="页面路径"></el-input>
@@ -109,7 +124,8 @@
             return {
                 query: {
                     pageno: 1,
-                    pagesize: 10
+                    pagesize: 10,
+                    level: ''
                 },
                 tableData: [],
                 pages: { total: 0 },
@@ -149,7 +165,8 @@
             resetQuery: function(){
                 vm.query = {
                     pageno: 1,
-                    pagesize: 10
+                    pagesize: 10,
+                    level: ''
                 }
             },
             // 新增弹窗
@@ -161,6 +178,7 @@
             // 编辑弹窗
             popEditDialog: function (row) {
                 vm.curItem = JSON.parse(JSON.stringify(row));
+                vm.curItem.level = vm.curItem.level + '';
                 vm.dialogTitle = '编辑';
                 vm.dialogFormVisible = true;
             },

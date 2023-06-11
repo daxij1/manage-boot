@@ -1,5 +1,6 @@
 package com.daxij1.manageboot.service.impl;
 
+import cn.hutool.core.io.file.FileNameUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.daxij1.manageboot.framework.exeception.ServiceException;
@@ -36,7 +37,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void updateUserInfo(SessionUserDTO sessionUserDTO, UserInfoUpdateParam param) {
         User user = new User();
         user.setId(sessionUserDTO.getId());
-        user.setAvator(param.getAvator());
+        user.setAvator(FileNameUtil.getName(param.getAvator()));
         user.setNickname(param.getNickname());
         user.setLastmodifiedtime(new Date());
         getBaseMapper().updateById(user);

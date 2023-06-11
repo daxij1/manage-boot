@@ -59,13 +59,25 @@
         .el-menu-item-group__title {
             padding: 0;
         }
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF;
+        }
     </style>
 </head>
 <body>
 <div id="app">
     <el-container class="is-vertical">
         <el-header style="--el-header-height:60px;" class="header el-col-24">
-            <div class="el-col-10">manage-boot</div>
+            <div class="el-col-10">
+                <el-image style="width: 180px; height: 60px;" src="./img/MBootLogo.jpg"></el-image>
+            </div>
             <div class="el-col-10"></div>
             <div class="userinfo el-col-4">
                 <el-dropdown @command="handleDropDownCommand">
@@ -74,8 +86,8 @@
                     </span>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item icon="el-icon-unlock" command="password">修改密码</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-edit-outline" command="userinfo">个人信息</el-dropdown-item>
+                        <el-dropdown-item icon="el-icon-unlock" command="password">修改密码</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-switch-button" command="logout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -105,7 +117,7 @@
         </el-container>
     </el-container>
 
-    <el-dialog :title="dialogTitle" :visible.sync="userDialogFormVisible">
+    <el-dialog :title="dialogTitle" :visible.sync="userDialogFormVisible" width="30%">
         <el-form>
             <el-form-item class="is-required" label="昵称：" label-width="120px">
                 <el-input v-model="userinfo.nickname"
@@ -113,10 +125,15 @@
                           placeholder="昵称"></el-input>
             </el-form-item>
             <el-form-item class="is-required" label="头像：" label-width="120px">
-                <el-input v-model="userinfo.avator"
-                          autocomplete="off"
-                          placeholder="头像"
-                ></el-input>
+                <el-upload
+                        action="/file/upload"
+                        :show-file-list="false"
+                        :before-upload="beforeAvatarUpload"
+                        :on-success="handleAvatarSuccess">
+                    <el-image v-if="userinfo.avator" :src="userinfo.avator" style="width: 100px; height: 100px"></el-image>
+                    <el-button type="text">修改</el-button>
+                    <div class="el-upload__tip" slot="tip">文件大小不能超过2M</div>
+                </el-upload>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -125,7 +142,7 @@
         </div>
     </el-dialog>
 
-    <el-dialog :title="dialogTitle" :visible.sync="passwordDialogFormVisible">
+    <el-dialog :title="dialogTitle" :visible.sync="passwordDialogFormVisible" width="30%">
         <el-form>
             <el-form-item class="is-required" label="输入旧密码：" label-width="120px">
                 <el-input v-model="passwordInfo.old"
@@ -170,6 +187,7 @@
                 dialogTitle: "用户信息",
                 userDialogFormVisible: false,
                 passwordDialogFormVisible: false,
+                dialogImageUrl: loginUserAvator,
                 userinfo: {
                     nickname: null,
                     avator: null,
@@ -183,7 +201,6 @@
         },
         methods: {
             handleDropDownCommand(command) {
-                console.log(command)
                 if (command === "logout") {
                     get("/user/logout").then(function (response) {
                         if (response.code === 200) {
@@ -203,13 +220,15 @@
             updateUserInfo() {
                 post("/user/updateInfo", vm.userinfo).then(function (response) {
                     if (response.code === 200) {
+                        vm.userDialogFormVisible = false;
                         vm.$message({
                             message: '成功',
-                            type: 'success'
+                            type: 'success',
+                            duration: 1000,
+                            onClose: function () {
+                                location.reload();
+                            }
                         });
-                        vm.userDialogFormVisible = false;
-                        vm.user.avator = vm.userinfo.avator;
-                        vm.user.nickname = vm.userinfo.nickname;
                     } else {
                         vm.$message.error(response.msg);
                     }
@@ -227,6 +246,20 @@
                         vm.$message.error(response.msg);
                     }
                 });
+            },
+            beforeAvatarUpload(file) {
+                const isLt2M = file.size / 1024 / 1024 < 2;
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isLt2M;
+            },
+            handleAvatarSuccess(res) {
+                if (res.code === 200) {
+                    vm.userinfo.avator = res.data.fullUrl;
+                } else {
+                    this.$message.error('文件上传失败');
+                }
             }
         }
     });

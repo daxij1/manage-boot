@@ -29,7 +29,7 @@ public class User implements Serializable {
     
     
     // 注册时默认头像
-    public static final String DEF_AVATOR = "./img/head_admin.jpg";
+    public static final String DEF_AVATOR = "./img/head.jpeg";
 
     /**
      * id

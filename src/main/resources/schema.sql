@@ -7,7 +7,7 @@ create TABLE `T_USER` (
 `id` INT AUTO_INCREMENT PRIMARY KEY,
 `username` varchar(60) UNIQUE NOT NULL,
 `password` varchar(60) NOT NULL,
-`avator` varchar(60) NOT NULL,
+`avator` varchar(255) NOT NULL,
 `nickname` varchar(60),
 `del` INT DEFAULT 0,
 `createtime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -16,7 +16,7 @@ create TABLE `T_USER` (
 comment on column `T_USER`.`id` is 'id';
 comment on column `T_USER`.`username` is '用户名';
 comment on column `T_USER`.`password` is '密码';
-comment on column `T_USER`.`avator` is '头像';
+comment on column `T_USER`.`avator` is '头像，数据库存文件名，接口获取时后端添加上http前缀，除了./开头的是默认头像用相对路径不加';
 comment on column `T_USER`.`nickname` is '昵称';
 comment on column `T_USER`.`del` is '删除标志 0-否 1-是';
 comment on column `T_USER`.`createtime` is '创建时间';

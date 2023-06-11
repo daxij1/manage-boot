@@ -43,6 +43,9 @@ public class MenuController {
         if (StringUtils.isNotEmpty(param.getName())) {
             queryWrapper.like("name", "%" + param.getName() + "%");
         }
+        if (param.getParentid() != null) {
+            queryWrapper.eq("parentid", param.getParentid());
+        }
         PageHelper.startPage(param.getPageno(), param.getPagesize());
         List<Menu> list = menuService.list(queryWrapper);
         return ResponseVO.success(new PageInfo<>(list));
