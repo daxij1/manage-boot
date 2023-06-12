@@ -72,11 +72,15 @@ public class UserController {
     
     @PostMapping("/list")
     @Auth(role = "系统管理员")
-    public ResponseVO<PageInfo<User>> list(@Valid @RequestBody UserQueryParam param){
+    public ResponseVO<PageInfo<User>> list(@Valid @RequestBody UserQueryParam param,HttpSession session){
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("del", 0);
         if (StringUtils.isNotEmpty(param.getUsername())) {
             queryWrapper.eq("username", param.getUsername());
+        }
+        SessionUserDTO sessionUser = (SessionUserDTO) session.getAttribute("user");
+        if (!sessionUser.getRoles().contains("超级管理员")) { //只有超级管理员才能管理超级管理员用户
+            queryWrapper.notIn("id", 0);
         }
         PageHelper.startPage(param.getPageno(), param.getPagesize());
         List<User> list = userService.list(queryWrapper);

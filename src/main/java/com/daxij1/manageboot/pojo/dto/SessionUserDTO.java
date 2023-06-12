@@ -19,7 +19,8 @@ public class SessionUserDTO {
     private String nickname;
 
     private String avator;
-    
+
+    // 角色名称
     private List<String> roles;
     
 }

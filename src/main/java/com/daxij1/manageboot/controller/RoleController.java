@@ -4,6 +4,7 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.daxij1.manageboot.framework.annotation.Auth;
 import com.daxij1.manageboot.framework.pojo.ResponseVO;
+import com.daxij1.manageboot.pojo.dto.SessionUserDTO;
 import com.daxij1.manageboot.pojo.entity.Role;
 import com.daxij1.manageboot.pojo.param.RoleAddOrUpdateParam;
 import com.daxij1.manageboot.pojo.param.RoleQueryParam;
@@ -15,6 +16,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -35,10 +37,14 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping("/list")
-    public ResponseVO<PageInfo<Role>> list(@Valid @RequestBody RoleQueryParam param){
+    public ResponseVO<PageInfo<Role>> list(@Valid @RequestBody RoleQueryParam param, HttpSession session){
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotEmpty(param.getName())) {
             queryWrapper.like("name", "%" + param.getName() + "%");
+        }
+        SessionUserDTO user = (SessionUserDTO) session.getAttribute("user");
+        if (!user.getRoles().contains("超级管理员")) { //只有超级管理员才能管理超级管理员角色
+            queryWrapper.notIn("id", 0);
         }
         PageHelper.startPage(param.getPageno(), param.getPagesize());
         List<Role> list = roleService.list(queryWrapper);
