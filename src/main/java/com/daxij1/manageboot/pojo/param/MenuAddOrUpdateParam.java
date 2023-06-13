@@ -20,7 +20,7 @@ public class MenuAddOrUpdateParam {
     private String name;
 
     @NotNull(message = "菜单层级不能为空")
-    @Min(message = "菜单层级参数错误", value = 1)
+    @Min(message = "菜单层级参数错误", value = 0)
     private Integer level;
     
     private Integer parentid;

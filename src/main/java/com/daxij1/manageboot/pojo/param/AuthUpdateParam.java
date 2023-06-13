@@ -10,7 +10,7 @@ import java.util.List;
 public class AuthUpdateParam {
 
     @NotNull(message = "角色id不能为空")
-    @Min(message = "角色id参数错误", value = 1)
+    @Min(message = "角色id参数错误", value = 0)
     private Integer roleid;
 
     @NotNull(message = "菜单参数不能为null")
