@@ -152,7 +152,8 @@ public class GoodsController {
 
 - 最终效果
 
-
+![输入图片说明](img/goods.png)
 
 ## 3.界面风格
 
+![输入图片说明](img/overview.jpg)
