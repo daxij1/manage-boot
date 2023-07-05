@@ -96,6 +96,9 @@
                 </includes>
                 <!--<filtering>false</filtering>filtering设为true可替换*.xml、*.properties配置文件中的占位符(${jdbc.url})-->
             </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
         </resources>
         <plugins>
             <plugin>
