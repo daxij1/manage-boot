@@ -56,11 +56,9 @@ public class MybatisPlusCodeGenerator {
         PackageConfig pc = new PackageConfig();
         pc.setModuleName("manageboot");
         pc.setParent("com.daxij1");
-        //pc.setService("service");
-        pc.setService("delete");//生成service，进行删除
-        pc.setServiceImpl("delete");//生成serviceimpl，进行删除
-        pc.setController("delete");//生成controller，进行删除
-        //pc.setController("controller");
+        pc.setService("service");
+        pc.setServiceImpl("service.impl");
+        pc.setController("controller");
         pc.setEntity("pojo.entity");
         pc.setMapper("mapper");
         mpg.setPackageInfo(pc);

@@ -45,7 +45,14 @@ public class ThymeleafController {
         String defaultOpenDir = "['" + menuList.get(0).getId() + "']";
         map.put("defaultOpenDir", defaultOpenDir);
         // 默认打开的模块
-        map.put("defaultModule", menuList.get(0).getMenuList().get(0).getId());
+        Integer defaultModuleId = null;
+        for (MenuDTO menuDTO : menuList) {
+            if (menuDTO.getMenuList() != null) {
+                defaultModuleId = menuDTO.getMenuList().get(0).getId();
+                break;
+            }
+        }
+        map.put("defaultModule", defaultModuleId);
         return "index";
     }
 

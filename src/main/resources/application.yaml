@@ -33,7 +33,7 @@ spring:
     # 控制应用启动时是否执行schema.sql和data.sql
     # EMBEDDED 仅初始化内嵌数据库
     # NEVER 从不初始化
-    initializationMode: EMBEDDED
+    initializationMode: NEVER
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
