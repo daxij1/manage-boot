@@ -28,7 +28,7 @@
                     <el-input v-model="query.name" placeholder="名称" style="width: 200px"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="loadList">查询</el-button>
+                    <el-button type="primary" @click="queryList">查询</el-button>
                     <el-button @click="resetQuery">重置</el-button>
                     <el-button type="danger" @click="popAddDialog">新增</el-button>
                 </el-form-item>
@@ -118,6 +118,10 @@
             }
         },
         methods: {
+            queryList: function () {
+                vm.query.pageno = 1;
+                vm.loadList();
+            },
             // 列表
             loadList: function () {
                 post("/role/list", vm.query).then(function (response) {
