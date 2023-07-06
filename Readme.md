@@ -42,10 +42,12 @@ admin/123456
 ```
 
 添加多数据源配置
+```properties
 spring.datasource.business.url=jdbc:mysql://localhost:3306/crm
 spring.datasource.business.username=root
 spring.datasource.business.password=123456
 spring.datasource.business.driver-class-name=com.mysql.cj.jdbc.Driver
+```
 
 ### 2.3 搭建管理页面
 
@@ -71,7 +73,7 @@ INSERT INTO `t_goods` VALUES (4, '汽车', '159999', '1', '可以跑的汽车', 
 
 - 生成代码
 
-打开类MybatisPlusCodeGenerator.java，修改项目根路径projectPath、数据库连接配置DataSourceConfig和需要生成代码的表名称strategy.setInclude("t_goods")，运行改类的main方法生成代码
+打开类MybatisPlusCodeGenerator.java，修改项目根路径projectPath、数据库连接配置DataSourceConfig和需要生成代码的表名称strategy.setInclude("t_goods")，运行该类的main方法生成代码
 
 - 添加列表、新增/修改、删除接口
 
@@ -125,13 +127,13 @@ public class GoodsController {
         } else { //新增
             goodService.save(goods);
         }
-        return ResponseVO.success();
+        return ResponseVO.success();![输入图片说明](src/main/resources/static/img/%E5%95%86%E5%93%81%E7%AE%A1%E7%90%86.png)
     }
 
     @GetMapping("/delete")
     public ResponseVO<Object> delete(Integer id){
         if (id == null || id <= 0) {
-            return ResponseVO.paramFail("菜单id有误");
+            return ResponseVO.paramFail("商品id有误");
         }
         goodService.removeById(id);
         return ResponseVO.success();
@@ -150,5 +152,8 @@ public class GoodsController {
 
 - 最终效果
 
+![输入图片说明](img/goods.png)
+
 ## 3.界面风格
 
+![输入图片说明](img/overview.jpg)
