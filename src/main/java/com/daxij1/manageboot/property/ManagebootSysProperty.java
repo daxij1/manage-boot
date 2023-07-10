@@ -17,5 +17,11 @@ import java.util.List;
 public class ManagebootSysProperty {
 
     private List<String> noauthUrls;
+    
+    private String druidStatUserName;
+    
+    private String druidStatPassword;
+    
+    private String druidStatAllow;
 
 }
